@@ -1,0 +1,41 @@
+[
+    {
+        "name": "youtube_1",
+        "contentProvider": "Youtube",
+        "status": "false",
+        "ip_address": "1.1.1.1",
+        "port": "8000"
+    },
+    {
+        "name": "youtube_2",
+        "contentProvider": "Youtube",
+        "status": "false",
+        "ip_address": "1.1.1.1",
+        "port": "8000"
+    },
+    {
+        "name": "youtube_3",
+        "contentProvider": "Youtube",
+        "status": "false",
+        "ip_address": "172.168.0.2",
+        "port": "8000"
+    },
+    {
+        "name": "youtube_4",
+        "contentProvider": "Youtube",
+        "status": "false",
+        "ip_address": "172.168.0.3",
+        "port": "8000"
+    },
+    {
+        "name": "cloud",
+        "contentProvider": "Youtube",
+        "status": "false",
+        "ip_address": "1.1.1.1",
+        "port": "8000"
+    },
+    {
+        "name": "calculater",
+        "availableNumber": 1
+    }
+]

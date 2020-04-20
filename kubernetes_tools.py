@@ -60,6 +60,7 @@ def pvc_create(core_v1_api,pvc_name):
         )
     )
     core_v1_api.create_namespaced_persistent_volume_claim(namespace="default", body=body)
+    print(pvc_name + "created ---")
 
 def service_youTube_create(core_v1_api,PORT_RESERVED):
     core_v1_api = core_v1_api
@@ -89,19 +90,20 @@ def youTube_control_deployment_object_create(port_allocated):
     # define container
     container = client.V1Container(
         name="youtube-control",
-        image="containerizededge/server-vod-hls",
+        image="youtube-server",
+        image_pull_policy="Never",
         ports=[client.V1ContainerPort(container_port=port_allocated)])
 
     # define template
     template = client.V1PodTemplateSpec(
-        metadata=client.V1ObjectMeta(labels={"app": "youtube-control"}),
+        metadata=client.V1ObjectMeta(labels={"youtube-control": "youtube-control"}),
         spec=client.V1PodSpec(containers=[container]))
 
     # define spec 
     spec = client.V1DeploymentSpec(
         replicas=1,
         template=template,
-        selector={'matchLabels': {'app': 'youtube-control'}})
+        selector={'matchLabels': {'youtube-control': 'youtube-control'}})
     
     # Instantiate the deployment object
     deployment_object = client.V1Deployment(
@@ -117,7 +119,9 @@ def youTube_deployment_object_create(port_allocated,pvc_name,deployment_name):
     # define container
     container = client.V1Container(
         name="youtube",
-        image="containerizededge/server-vod-hls",
+        image="cdnyoutube",
+        # we use the local image on docker
+        image_pull_policy="Never",
         ports=[client.V1ContainerPort(container_port=port_allocated)],
         volume_mounts=[client.V1VolumeMount(
                       mount_path="/var/empty",
@@ -125,20 +129,20 @@ def youTube_deployment_object_create(port_allocated,pvc_name,deployment_name):
 
     # define template
     template = client.V1PodTemplateSpec(
-        metadata=client.V1ObjectMeta(labels={"app": "youtube"}),
+        metadata=client.V1ObjectMeta(labels={deployment_name: deployment_name}),
         spec=client.V1PodSpec(containers=[container],
                               volumes=[client.V1Volume(
                               name="mypd",
                               persistent_volume_claim=
                               client.V1PersistentVolumeClaimVolumeSource(
                                   claim_name=pvc_name))],
-                              hostname="youtube-1"))
+                              hostname=deployment_name))
 
     # define spec 
     spec = client.V1DeploymentSpec(
         replicas=1,
         template=template,
-        selector={'matchLabels': {'app': 'youtube'}})
+        selector={'matchLabels': {deployment_name: deployment_name}})
     
     # Instantiate the deployment object
     deployment_object = client.V1Deployment(
@@ -149,58 +153,71 @@ def youTube_deployment_object_create(port_allocated,pvc_name,deployment_name):
     
     return deployment_object
 
-def netflix_deployment_object_create(port_allocated):
-
+def netflix_control_deployment_object_create(port_allocated):
+    
     # define container
     container = client.V1Container(
-        name="netflix",
-        image="containerizededge/server-vod-hls",
+        name="netflix-control",
+        image="youtube-server",
+        image_pull_policy="Never",
         ports=[client.V1ContainerPort(container_port=port_allocated)])
 
     # define template
     template = client.V1PodTemplateSpec(
-        metadata=client.V1ObjectMeta(labels={"app": "netflix"}),
+        metadata=client.V1ObjectMeta(labels={"netflix-control": "netflix-control"}),
         spec=client.V1PodSpec(containers=[container]))
 
     # define spec 
     spec = client.V1DeploymentSpec(
         replicas=1,
         template=template,
-        selector={'matchLabels': {'app': 'netflix'}})
+        selector={'matchLabels': {'netflix-control': 'netflix-control'}})
     
-    # make the deployment file object
+    # Instantiate the deployment object
     deployment_object = client.V1Deployment(
         api_version="apps/v1",
         kind="Deployment",
-        metadata=client.V1ObjectMeta(name="netflix-deployment"),
+        metadata=client.V1ObjectMeta(name="netflix-control"),
         spec=spec)
     
     return deployment_object
 
-
+def netflix_deployment_object_create(port_allocated,pvc_name,deployment_name):
 
     # define container
     container = client.V1Container(
-        name="cloud-youtube",
-        image="containerizededge/server-vod-hls",
-        ports=[client.V1ContainerPort(container_port=port_allocated)])
+        name="netflix",
+        # we impose the same image for netflix service
+        image="cdnyoutube",
+        # we use the local image on docker
+        image_pull_policy="Never",
+        ports=[client.V1ContainerPort(container_port=port_allocated)],
+        volume_mounts=[client.V1VolumeMount(
+                      mount_path="/var/empty",
+                      name="mypd")])
 
     # define template
     template = client.V1PodTemplateSpec(
-        metadata=client.V1ObjectMeta(labels={"app": "cloud"}),
-        spec=client.V1PodSpec(containers=[container]))
+        metadata=client.V1ObjectMeta(labels={deployment_name: deployment_name}),
+        spec=client.V1PodSpec(containers=[container],
+                              volumes=[client.V1Volume(
+                              name="mypd",
+                              persistent_volume_claim=
+                              client.V1PersistentVolumeClaimVolumeSource(
+                                  claim_name=pvc_name))],
+                              hostname=deployment_name))
 
     # define spec 
     spec = client.V1DeploymentSpec(
         replicas=1,
         template=template,
-        selector={'matchLabels': {'app': 'cloud'}})
+        selector={'matchLabels': {deployment_name: deployment_name}})
     
-    # make the deployment file object
+    # Instantiate the deployment object
     deployment_object = client.V1Deployment(
         api_version="apps/v1",
         kind="Deployment",
-        metadata=client.V1ObjectMeta(name="cloud-youtube-deployment"),
+        metadata=client.V1ObjectMeta(name=deployment_name),
         spec=spec)
     
     return deployment_object
@@ -239,7 +256,6 @@ def update_replicas_deployment(api_instance, deployment, amount, deployment_name
         )
     
     print("Deployment updated. status='%s'" % str(api_response.status))
-
 
 def event_monitoring():
     config.load_kube_config()
@@ -300,6 +316,23 @@ def get_deployment_list():
 
     # return the deployments
     return deployments
+
+def get_deployment_info(core_v1_api, deployment_name):
+    # use "for" to wait the info
+    for i in range(1,10):
+        data = core_v1_api.list_namespaced_pod("default",label_selector = deployment_name)
+        pod_ip_address = data.items[0].status.pod_ip
+        if pod_ip_address is None:
+            print(str(i) + "time, try later")
+            time.sleep(2)
+        else :
+            print("read sucessfully")
+            break
+        if i == 10:
+            print("Can't find the pod:" + deployment_name)
+            return ""    
+    return pod_ip_address
+
 
 def delete_all_deployments(api_instance):
     deployments = get_deployment_list()

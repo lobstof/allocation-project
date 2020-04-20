@@ -1,17 +1,19 @@
 import requests
 
-def update_list(hostip,port,_name,_port,_ip_address,_status):
+def update_list(hostip,service_port,_name,_port,_ip_address,_status):
     # params prepare
-    hostip = "http://localhost"
-    port = "3002"
-    _name = "youtube_1"
-    _port = "10086"
-    _ip_address = "1.1.1.1"
-    _status = "true"
+    hostip = hostip
+    service_port = service_port
+
+    # preapre the Pod's infomation 
+    _name = _name
+    _port = _port
+    _ip_address = _ip_address
+    _status = _status
     query = "/?name=" + _name + "&port=" + _port + "&ip_address=" + _ip_address + "&status=" + _status
 
     # prepare url
-    url = hostip + ":" + port + query
+    url = "http://" + hostip + ":" + service_port + query
 
     payload = {}
     headers= {}
@@ -24,5 +26,26 @@ def update_list(hostip,port,_name,_port,_ip_address,_status):
     else:
         return False
     
+def initial_list(hostip, service_port):
+    # location of the server
+    hostip = hostip
+    service_port = service_port
 
-# update_list("http://localhost","3002","youtube_1","10086","1.1.1.1","true")
+    # build the initialization request
+    query = "/?initial=true"
+
+    # build the request url 
+    url = "http://" + hostip + ":" + service_port + query
+
+    payload = {}
+    headers= {}
+    # send the request
+    response = requests.request("GET", url, headers=headers, data = payload)
+
+    # catch the return status code
+    if (response.status_code == 200):
+        return True
+    else:
+        return False
+
+     

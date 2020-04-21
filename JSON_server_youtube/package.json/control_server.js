@@ -62,11 +62,11 @@ var data = JSON.stringify(pod_list);
 function build_list() {
     fs.writeFile('./list.json', data, function (err) {
         if (err) {
-            // console.log('There has been an error saving your configuration data.');
-            // console.log(err.message);
+            console.log('There has been an error saving your configuration data.');
+            console.log(err.message);
             return;
         }
-        // console.log('list build successfully.')
+        console.log('list build successfully.')
     });
 }
 
@@ -103,11 +103,11 @@ function update_list(_name, _ip_address, _port, _status) {
                 if(_status == "true"){
                     // we are adding the pod
                     pods[5].availableNumber = i+1;
-                    // console.log("we are adding the pod availableNumber:" + pods[5].availableNumber)
+                    console.log("we are adding the pod availableNumber:" + pods[5].availableNumber)
                 } else {
                     // we are deleting the pod
                     pods[5].availableNumber = i;
-                    // console.log("we are deleting the pod availableNumber:" + pods[5].availableNumber)
+                    console.log("we are deleting the pod availableNumber:" + pods[5].availableNumber)
                 }
                 break;
             }
@@ -145,7 +145,17 @@ const server = http.createServer((req, res) => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
             res.end();
-            // console.log("end of initializing list");
+            console.log("end of initializing list");
+        } else if(q.check == "true"){
+            jsonReader('list.json', (err, pods) => {
+                pods
+                res.writeHead(200, {
+                    'Content-Type': 'json'
+                });
+                res.write(JSON.stringify(pods))
+                res.end();
+                console.log("end of check list");
+            });
         } else {
             // todo : verify the parms aren't void 
             update_list(_name, _ip_address, _port, _status);
@@ -155,7 +165,7 @@ const server = http.createServer((req, res) => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
             res.end();
-            // console.log("end of updating list");
+            console.log("end of updating list");
         }
 });
 

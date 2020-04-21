@@ -6,6 +6,11 @@ const NumberCloudServer = 4;
 // define a pods buffer
 var returnPod = [];
 
+// function
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+  
 
 function jsonReader(filePath, cb) {
     fs.readFile(filePath, (err, fileData) => {
@@ -37,20 +42,20 @@ function read_list(_number) {
 
     jsonReader('list.json', (err, pods) => {
         if (err) throw false;
-        // console.log("pod list read sucess");
+        console.log("pod list read sucess");
         availablePods = pods[5].availableNumber;
-        // console.log("podSelected"+pod_selected)
-        // console.log(availablePods);
+        console.log("podSelected"+pod_selected)
+        console.log("availablePods"+availablePods);
         // if the _number isn't smaller than Pods
         // the request than should be redirect to the cloud server
-        if(pod_selected>availablePods){
+        if(pod_selected>availablePods-1){
             pod_selected = NumberCloudServer;
             }
         // get the server's infos
         // console.log("get the infos");
         returnPod[0] = pods[pod_selected].ip_address;
         returnPod[1] = pods[pod_selected].port;
-        console.log(pod_selected);
+        console.log("pod_selected later:" + pod_selected);
         console.log(returnPod[0]);
         console.log(returnPod[1]);
 
@@ -75,27 +80,29 @@ function read_list(_number) {
 
 
 http.createServer(function (req, res) {
+    // random key
+    random_key = getRandomInt(1000);
     // read request number
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
     var q = url.parse(req.url, true).query;
     var number = Number(q.number);
-    // console.log("number = " + number);
+    console.log("received number = " + number + ":" + random_key);
     // make sure that client has given the right number positif
     if(isNaN(number) || number<1){
         res.writeHead(422, {'Content-Type': 'text/plain'});
         res.end("Can't find the resource, please give a positif number of video")
-        // console.log("Error, number missed")
+        console.log("Error, number wrong" + ":" + random_key)
     } else {
         // read the latest list
         returnPodInfo = read_list(number);
-        // console.log("returnPodInfo = " +returnPodInfo)
+        console.log("returnPodInfo = " +returnPodInfo + ":" + random_key)
         ip_address = returnPodInfo[0];
         port = returnPodInfo[1];
         res.writeHead(302, {
             'Location' : "http://"+ip_address+":"+port
         });
         res.end();
-        // console.log("End of Service")
+        console.log("End of Service" + ":" + random_key)
     }
 }).listen(9999); 

@@ -1,0 +1,4 @@
+# ignore all caches
+/__pycache__
+*.pyc
+note/.~lock.phantomJS.odt#

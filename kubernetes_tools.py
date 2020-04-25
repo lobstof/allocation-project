@@ -119,6 +119,7 @@ def youTube_deployment_object_create(port_allocated,pvc_name,deployment_name):
     # define container
     container = client.V1Container(
         name="youtube",
+        # image="containerizededge/server-vod-hls",
         image="cdnyoutube",
         # we use the local image on docker
         image_pull_policy="Never",
@@ -158,7 +159,8 @@ def netflix_control_deployment_object_create(port_allocated):
     # define container
     container = client.V1Container(
         name="netflix-control",
-        image="youtube-server",
+        # we take the same image for netflix server
+        image="netflix-server",
         image_pull_policy="Never",
         ports=[client.V1ContainerPort(container_port=port_allocated)])
 
@@ -188,7 +190,7 @@ def netflix_deployment_object_create(port_allocated,pvc_name,deployment_name):
     container = client.V1Container(
         name="netflix",
         # we impose the same image for netflix service
-        image="cdnyoutube",
+        image="cdnnetflix",
         # we use the local image on docker
         image_pull_policy="Never",
         ports=[client.V1ContainerPort(container_port=port_allocated)],

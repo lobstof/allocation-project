@@ -48,4 +48,24 @@ def initial_list(hostip, service_port):
     else:
         return False
 
-     
+def check_list(hostip, service_port):
+    # location of the server
+    hostip = hostip
+    service_port = service_port
+
+    # build the list check request
+    query = "/?check=true"
+
+    # build the request url 
+    url = "http://" + hostip + ":" + service_port + query
+    
+    payload = {}
+    headers= {}
+    # send the request
+    response = requests.request("GET", url, headers=headers, data = payload)
+
+    # catch the return status code
+    if (response.status_code == 200):
+        return response.content
+    else:
+        return False

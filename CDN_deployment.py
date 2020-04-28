@@ -8,10 +8,10 @@ from pick import pick
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"
 # default value
-YOUTUBE_SERVER_IP = "1.1.1.1"
+YOUTUBE_SERVER_IP = "172.17.0.3"
 YOUTUBE_SERVER_PORT = "3000"
 
-NETFLIX_SERVER_IP = "1.1.1.1"
+NETFLIX_SERVER_IP = "172.17.0.2"
 NETFLIX_SERVER_PORT = "2000"
 
 FILEPATH = "record.json"
@@ -304,7 +304,7 @@ def simultaion():
     print("initialization finish")
 
     print("waiting ...")
-    time.sleep(200)
+    # time.sleep(200) 1
     time.sleep(5)
     # observe the two pods list
     log1 = stream_monitor(YOUTUBE_SERVER_IP, YOUTUBE_SERVER_PORT)
@@ -315,14 +315,14 @@ def simultaion():
     file_record.write("state1_netflix")
     file_record.write(json.dumps(log2))
 
-    time.sleep(5)
+    time.sleep(5) 
     
 
     # We then perturb it: we remove one container to CP1 and give a container to CP2.
     de_allocation_to_netflix_2()
     time.sleep(5)
     allocation_to_youtube_3()
-    time.sleep(5)
+    # time.sleep(5) 2
 
     # observe the two pods list
     log3 = stream_monitor(YOUTUBE_SERVER_IP, YOUTUBE_SERVER_PORT)
@@ -368,6 +368,7 @@ def test2():
 
 if __name__ == '__main__':
     # initial()
-    simultaion()
-    # stop_service()
+    # simultaion()
+    stop_service()
     # test2()
+    

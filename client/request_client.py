@@ -1,9 +1,13 @@
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from time import sleep
+import time
+import sys 
 from random import randint
-TOTAL_NUMBER = 50
-ID = randint(0,10000)
+TOTAL_CONTENT_NUMBER = 50
+SERVICE_DURATION = 2
+REQUEST_TIME = 3
+WAIT_TIME = 2
 
 import numpy as np
 
@@ -86,7 +90,7 @@ def simulation_test_netflix(hostip, service_port, number1, number2):
 
 
 
-def simulation_youtube(hostip, service_port):
+def simulation_youtube(hostip, service_port, ID, SERVICE_COMPTER):
    
     opts = Options()
     opts.set_headless()
@@ -97,18 +101,18 @@ def simulation_youtube(hostip, service_port):
     service_port = service_port
     # query1
 
-    number = randint(0,TOTAL_NUMBER)
+    number = randint(0,TOTAL_CONTENT_NUMBER)
     query = "/?number=" + str(number)
-    print("ID = " + str(ID) + "  number = %d" % number + "--youtube")
+    print("ID = " + ID + "  number = %d" % number + "--youtube")
     url = "http://" + hostip + ":" + service_port + query
     browser.get(url)
-    sleep(20)
-    print("ID = " + str(ID) + "end: " + str(number) "--youtube")
+    sleep(SERVICE_DURATION)
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
     browser.close()
 
 
 # simulation youtube
-def simulation_netflix(hostip, service_port):
+def simulation_netflix(hostip, service_port, ID, SERVICE_COMPTER):
     
     opts = Options()
     opts.set_headless()
@@ -119,22 +123,35 @@ def simulation_netflix(hostip, service_port):
     service_port = service_port
     # query1
 
-    number = randint(0,TOTAL_NUMBER)
+    number = randint(0,TOTAL_CONTENT_NUMBER)
     query = "/?number=" + str(number)
-    print("ID = " + str(ID) + "  number = %d" % number + "netflix")
+    print("ID = " + ID + "  number = %d" % number + "--netflix")
     url = "http://" + hostip + ":" + service_port + query
     browser.get(url)
-    sleep(20)
-    print("ID = " + str(ID) + "end: " + str(number) + "netflix")
+    sleep(SERVICE_DURATION)
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
     browser.close()
 
-
+range
 # simulation_test_youtube("172.17.0.10","9999","5","13","23","33")
 # simulation_test_netflix("172.17.0.11","8888","5","13")
 
-def request_simulation():
+def request_simulation(ID):
     
-    for i in range(15):
-        simulation_youtube("172.17.0.6","9999")
-        simulation_netflix("172.17.0.7","8888")
-        sleep(3)
+    for i in range(REQUEST_TIME):
+        simulation_youtube("172.17.0.3","9999",ID,i)
+        simulation_netflix("172.17.0.2","8888",ID,i)
+        sleep(WAIT_TIME)
+
+if __name__ == "__main__":
+    log_file = open('run.log', 'a')
+    sys.stdout = log_file
+    start_time = time.time()
+    print("ID = "+ str(sys.argv[1]) + "start time = %s seconds ---" % (start_time))
+    request_simulation(sys.argv[1])
+    print("ID = "+ str(sys.argv[1]) + "--- %s seconds ---" % (time.time() - start_time))
+    log_file.close()
+
+
+
+# duration estimation : (SERVICE_TIME + SERVICE_TIME + WAIT_TIME + 15s) *  REQUEST_TIME

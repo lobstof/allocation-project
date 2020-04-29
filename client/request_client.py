@@ -3,11 +3,16 @@ from selenium.webdriver.chrome.options import Options
 from time import sleep
 import time
 import sys 
+
 from random import randint
 TOTAL_CONTENT_NUMBER = 50
-SERVICE_DURATION = 2
-REQUEST_TIME = 3
-WAIT_TIME = 2
+SERVICE_DURATION = 3
+REQUEST_TIME = 100
+WAIT_DURATION = 2
+
+YOUTUBE_SERVICE_PORT = "9999"
+NETFLIX_SERVICE_PORT = "8888"
+
 
 import numpy as np
 
@@ -136,22 +141,34 @@ range
 # simulation_test_youtube("172.17.0.10","9999","5","13","23","33")
 # simulation_test_netflix("172.17.0.11","8888","5","13")
 
-def request_simulation(ID):
+def request_simulation(youtube_ip,netflix_ip,ID):
     
     for i in range(REQUEST_TIME):
-        simulation_youtube("172.17.0.3","9999",ID,i)
-        simulation_netflix("172.17.0.2","8888",ID,i)
-        sleep(WAIT_TIME)
+        simulation_youtube(youtube_ip,YOUTUBE_SERVICE_PORT,ID,i)
+        simulation_youtube(youtube_ip,YOUTUBE_SERVICE_PORT,ID,i)
+        simulation_netflix(netflix_ip,NETFLIX_SERVICE_PORT,ID,i)
+        sleep(WAIT_DURATION)
+
+def test():
+    ID = "test"
+    i = 1
+    simulation_youtube("172.17.0.7","9999",ID,i)
+    # simulation_netflix("172.17.0.6","8888",ID,i)
+
 
 if __name__ == "__main__":
     log_file = open('run.log', 'a')
     sys.stdout = log_file
     start_time = time.time()
     print("ID = "+ str(sys.argv[1]) + "start time = %s seconds ---" % (start_time))
-    request_simulation(sys.argv[1])
+    request_simulation(sys.argv[1],sys.argv[2],sys.argv[3])
     print("ID = "+ str(sys.argv[1]) + "--- %s seconds ---" % (time.time() - start_time))
+    # test()
     log_file.close()
+    # time.sleep(5)
+    # print("para1:" + str(sys.argv[1]) + "  para2:" + str(sys.argv[2]))
 
 
 
-# duration estimation : (SERVICE_TIME + SERVICE_TIME + WAIT_TIME + 15s) *  REQUEST_TIME
+
+# duration estimation : (SERVICE_TIME + SERVICE_TIME + WAIT_DURATION + 15s) *  REQUEST_TIME

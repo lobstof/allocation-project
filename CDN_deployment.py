@@ -4,14 +4,16 @@ import update_list as up
 import json
 from kubernetes import client, config, watch
 from pick import pick
+import os
+import threading
 
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"
 # default value
-YOUTUBE_SERVER_IP = "172.17.0.3"
+YOUTUBE_SERVER_IP = "172.17.0.6"
 YOUTUBE_SERVER_PORT = "3000"
 
-NETFLIX_SERVER_IP = "172.17.0.2"
+NETFLIX_SERVER_IP = "172.17.0.7"
 NETFLIX_SERVER_PORT = "2000"
 
 FILEPATH = "record.json"
@@ -302,10 +304,13 @@ def simultaion():
     # 2 pods for YouYube, 3 pods for Netflix
     initial()
     print("initialization finish")
-
     print("waiting ...")
-    # time.sleep(200) 1
     time.sleep(5)
+    # start cleint request simulation
+    # pass the youtube and netflix server IP address 
+    threading._start_new_thread(os.system, ("sh ./client/simulation.sh {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP),))
+
+    time.sleep(2000)
     # observe the two pods list
     log1 = stream_monitor(YOUTUBE_SERVER_IP, YOUTUBE_SERVER_PORT)
     file_record.write("state1_youtube")
@@ -322,7 +327,8 @@ def simultaion():
     de_allocation_to_netflix_2()
     time.sleep(5)
     allocation_to_youtube_3()
-    # time.sleep(5) 2
+    print("waiting ...")
+    time.sleep(2000) 
 
     # observe the two pods list
     log3 = stream_monitor(YOUTUBE_SERVER_IP, YOUTUBE_SERVER_PORT)
@@ -368,7 +374,6 @@ def test2():
 
 if __name__ == '__main__':
     # initial()
-    # simultaion()
-    stop_service()
-    # test2()
-    
+    simultaion()
+    # stop_service()
+    # test2() 

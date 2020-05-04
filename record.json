@@ -1,185 +1,96 @@
-state1_youtube[
-    {
-        "name": "youtube-1",
-        "contentProvider": "Youtube",
-        "status": "true",
-        "ip_address": "172.17.0.8",
-        "port": "8000",
-        "request_number": 74
-    },
-    {
-        "name": "youtube-2",
-        "contentProvider": "Youtube",
-        "status": "true",
-        "ip_address": "172.17.0.9",
-        "port": "8000",
-        "request_number": 64
-    },
-    {
-        "name": "youtube-3",
-        "contentProvider": "Youtube",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 0
-    },
-    {
-        "name": "youtube-4",
-        "contentProvider": "Youtube",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 0
-    },
-    {
-        "name": "youtube-cloud",
-        "contentProvider": "Youtube",
-        "status": "true",
-        "ip_address": "172.17.0.10",
-        "port": "8000",
-        "request_number": 217
-    },
-    {
-        "name": "calculater",
-        "availableNumber": 2,
-        "total_request_number": 355
-    }
-]state1_netflix[
-    {
-        "name": "netflix-1",
-        "contentProvider": "Netflix",
-        "status": "true",
-        "ip_address": "172.17.0.11",
-        "port": "8000",
-        "request_number": 34
-    },
-    {
-        "name": "netflix-2",
-        "contentProvider": "Netflix",
-        "status": "true",
-        "ip_address": "172.17.0.12",
-        "port": "8000",
-        "request_number": 41
-    },
-    {
-        "name": "netflix-3",
-        "contentProvider": "Netflix",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 0
-    },
-    {
-        "name": "netflix-4",
-        "contentProvider": "Netflix",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 0
-    },
-    {
-        "name": "netflix-cloud",
-        "contentProvider": "Netflix",
-        "status": "true",
-        "ip_address": "172.17.0.13",
-        "port": "8000",
-        "request_number": 102
-    },
-    {
-        "name": "calculater",
-        "availableNumber": 2,
-        "total_request_number": 177
-    }
-]state2_youtube[
-    {
-        "name": "youtube-1",
-        "contentProvider": "Youtube",
-        "status": "true",
-        "ip_address": "172.17.0.8",
-        "port": "8000",
-        "request_number": 146
-    },
-    {
-        "name": "youtube-2",
-        "contentProvider": "Youtube",
-        "status": "true",
-        "ip_address": "172.17.0.9",
-        "port": "8000",
-        "request_number": 148
-    },
-    {
-        "name": "youtube-3",
-        "contentProvider": "Youtube",
-        "status": "true",
-        "ip_address": "172.17.0.14",
-        "port": "8000",
-        "request_number": 79
-    },
-    {
-        "name": "youtube-4",
-        "contentProvider": "Youtube",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 0
-    },
-    {
-        "name": "youtube-cloud",
-        "contentProvider": "Youtube",
-        "status": "true",
-        "ip_address": "172.17.0.10",
-        "port": "8000",
-        "request_number": 373
-    },
-    {
-        "name": "calculater",
-        "availableNumber": 3,
-        "total_request_number": 746
-    }
-]state2_netflix[
-    {
-        "name": "netflix-1",
-        "contentProvider": "Netflix",
-        "status": "true",
-        "ip_address": "172.17.0.11",
-        "port": "8000",
-        "request_number": 63
-    },
-    {
-        "name": "netflix-2",
-        "contentProvider": "Netflix",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 41
-    },
-    {
-        "name": "netflix-3",
-        "contentProvider": "Netflix",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 0
-    },
-    {
-        "name": "netflix-4",
-        "contentProvider": "Netflix",
-        "status": "false",
-        "ip_address": "1.1.1.1",
-        "port": "8000",
-        "request_number": 0
-    },
-    {
-        "name": "netflix-cloud",
-        "contentProvider": "Netflix",
-        "status": "true",
-        "ip_address": "172.17.0.13",
-        "port": "8000",
-        "request_number": 262
-    },
-    {
-        "name": "calculater",
-        "availableNumber": 1,
-        "total_request_number": 366
-    }
-]
+{
+    "state1_youtube": [
+        {
+            "name": "youtube-1",
+            "contentProvider": "Youtube",
+            "status": "true",
+            "ip_address": "172.17.0.8",
+            "port": "8000",
+            "request_number": 74
+        },
+        {
+            "name": "youtube-2",
+            "contentProvider": "Youtube",
+            "status": "true",
+            "ip_address": "172.17.0.9",
+            "port": "8000",
+            "request_number": 64
+        },
+        {
+            "name": "youtube-3",
+            "contentProvider": "Youtube",
+            "status": "false",
+            "ip_address": "1.1.1.1",
+            "port": "8000",
+            "request_number": 0
+        },
+        {
+            "name": "youtube-4",
+            "contentProvider": "Youtube",
+            "status": "false",
+            "ip_address": "1.1.1.1",
+            "port": "8000",
+            "request_number": 0
+        },
+        {
+            "name": "youtube-cloud",
+            "contentProvider": "Youtube",
+            "status": "true",
+            "ip_address": "172.17.0.10",
+            "port": "8000",
+            "request_number": 217
+        },
+        {
+            "name": "calculater",
+            "availableNumber": 2,
+            "total_request_number": 355
+        }
+    ],
+    "state1_netflix": [
+        {
+            "name": "youtube-1",
+            "contentProvider": "Youtube",
+            "status": "true",
+            "ip_address": "172.17.0.8",
+            "port": "8000",
+            "request_number": 74
+        },
+        {
+            "name": "youtube-2",
+            "contentProvider": "Youtube",
+            "status": "true",
+            "ip_address": "172.17.0.9",
+            "port": "8000",
+            "request_number": 64
+        },
+        {
+            "name": "youtube-3",
+            "contentProvider": "Youtube",
+            "status": "false",
+            "ip_address": "1.1.1.1",
+            "port": "8000",
+            "request_number": 0
+        },
+        {
+            "name": "youtube-4",
+            "contentProvider": "Youtube",
+            "status": "false",
+            "ip_address": "1.1.1.1",
+            "port": "8000",
+            "request_number": 0
+        },
+        {
+            "name": "youtube-cloud",
+            "contentProvider": "Youtube",
+            "status": "true",
+            "ip_address": "172.17.0.10",
+            "port": "8000",
+            "request_number": 89
+        },
+        {
+            "name": "calculater",
+            "availableNumber": 2,
+            "total_request_number": 100
+        }
+    ]
+}

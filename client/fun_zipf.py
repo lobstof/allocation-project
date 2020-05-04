@@ -19,6 +19,7 @@ class ZipfGenerator:
         self.s = s
         self.N = N
         self.zipf_list = []
+        self.zipf_prop_list = []
 
         # generate distribution list according to the s and N
         def nomilized_zipf(self,k):
@@ -30,6 +31,14 @@ class ZipfGenerator:
             return_value = numerator / denominator
 
             return return_value
+        
+        def zipf_probability_list(self):
+            zipf_prop_list = []
+            
+            for i in range(self.N):
+                prop = nomilized_zipf(self,(i+1))
+                zipf_prop_list.append(prop)
+            return zipf_prop_list
 
         def zipf_distribution_list(self):
             zipf_list = []
@@ -44,6 +53,7 @@ class ZipfGenerator:
             return zipf_list
 
         self.zipf_list = zipf_distribution_list(self)
+        self.zipf_prop_list = zipf_probability_list(self)
 
     
     def random_zipf_normalized_generator(self):
@@ -58,16 +68,20 @@ class ZipfGenerator:
             if (random_uniform - zipf_list[i]) < 0:
                 return i+1
         return N
+    
+    def get_probability_list(self):
+        return self.zipf_prop_list
 
 
 def test():
     zipfGenerator_1 = ZipfGenerator(1.2,10)
     result = []
-    for i in range(100):
+    for i in range(1000):
         temp = zipfGenerator_1.random_zipf_normalized_generator()
         result.append(temp)
 
     counter_result = Counter(result)
     print(counter_result)    
+
 
 

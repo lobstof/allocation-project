@@ -3,16 +3,22 @@ from selenium.webdriver.chrome.options import Options
 from time import sleep
 import time
 import sys 
+import fun_zipf
+import matplotlib.pyplot as plt
+import subprocess
+import shlex
+import random 
 
 from random import randint
-TOTAL_CONTENT_NUMBER = 50
-SERVICE_DURATION = 3
-REQUEST_TIME = 150
-WAIT_DURATION = 2
+# content number must be multiple of 10
+TOTAL_CONTENT_NUMBER = 60
+SERVICE_DURATION = 40
+WAIT_DURATION = 8
 
 YOUTUBE_SERVICE_PORT = "9999"
 NETFLIX_SERVICE_PORT = "8888"
 
+ZIPF_S = 0.4
 
 import numpy as np
 
@@ -21,82 +27,8 @@ def get_zipf_random():
     s = np.random.zipf(a, size=None)
     return s
 
-
-# simulation youtube
-def simulation_test_youtube(hostip, service_port, number1, number2, number3, number4):
-    for i in range(2):
-        # disable the UI
-        opts = Options()
-        opts.set_headless()
-        assert opts.headless is True, "headless has not been set yet"# Operating in headless mode
-        browser1 = Chrome(options=opts)
-        browser2 = Chrome(options=opts)
-        browser3 = Chrome(options=opts)
-        browser4 = Chrome(options=opts)
-
-        hostip = hostip
-        service_port = service_port
-        # query1
-        query1 = "/?number=" + number1
-        url1 = "http://" + hostip + ":" + service_port + query1
-        browser1.get(url1)
-        browser1.close()
-
-        # query2
-        query2 = "/?number=" + number2
-        url2 = "http://" + hostip + ":" + service_port + query2
-        browser2.get(url2)
-        browser2.close()
-
-        # query3
-        query3 = "/?number=" + number3
-        url3 = "http://" + hostip + ":" + service_port + query3
-        browser3.get(url3)
-        browser3.close()
-
-
-        # query4
-        query4 = "/?number=" + number4
-        url4 = "http://" + hostip + ":" + service_port + query4
-        browser4.get(url4)
-        browser4.close()
-
-        
-        print("youtube: " + "%d" % (i+1))
-        
-
-# simulation youtube
-def simulation_test_netflix(hostip, service_port, number1, number2):
-
-    for i in range(2):
-        # disable the UI
-        opts = Options()
-        opts.set_headless()
-        assert opts.headless is True, "headless has not been set yet"# Operating in headless mode
-        browser1 = Chrome(options=opts)
-        browser2 = Chrome(options=opts)
-
-
-        hostip = hostip
-        service_port = service_port
-        # query1
-        query1 = "/?number=" + number1
-        url1 = "http://" + hostip + ":" + service_port + query1
-        browser1.get(url1)
-        browser1.close()
-
-        # query2
-        query2 = "/?number=" + number2
-        url2 = "http://" + hostip + ":" + service_port + query2
-        browser2.get(url2)
-        browser2.close()
-
-        print("netflix: " + "%d" % (i+1))
-
-
-
-def simulation_youtube(hostip, service_port, ID, SERVICE_COMPTER):
-   
+def simulation_youtube(hostip, service_port, ID,generator_zipf):
+    generator_zipf = generator_zipf
     opts = Options()
     opts.set_headless()
     assert opts.headless is True, "headless has not been set yet"# Operating in headless mode
@@ -106,7 +38,7 @@ def simulation_youtube(hostip, service_port, ID, SERVICE_COMPTER):
     service_port = service_port
     # query1
 
-    number = randint(0,TOTAL_CONTENT_NUMBER)
+    number = generator_zipf.random_zipf_normalized_generator()
     query = "/?number=" + str(number)
     print("ID = " + ID + "  number = %d" % number + "--youtube")
     url = "http://" + hostip + ":" + service_port + query
@@ -115,10 +47,9 @@ def simulation_youtube(hostip, service_port, ID, SERVICE_COMPTER):
     print("ID = " + ID + "end: " + str(number) + "--youtube")
     browser.close()
 
-
 # simulation youtube
-def simulation_netflix(hostip, service_port, ID, SERVICE_COMPTER):
-    
+def simulation_netflix(hostip, service_port, ID,generator_zipf):
+    generator_zipf = generator_zipf
     opts = Options()
     opts.set_headless()
     assert opts.headless is True, "headless has not been set yet"# Operating in headless mode
@@ -128,7 +59,7 @@ def simulation_netflix(hostip, service_port, ID, SERVICE_COMPTER):
     service_port = service_port
     # query1
 
-    number = randint(0,TOTAL_CONTENT_NUMBER)
+    number = generator_zipf.random_zipf_normalized_generator()
     query = "/?number=" + str(number)
     print("ID = " + ID + "  number = %d" % number + "--netflix")
     url = "http://" + hostip + ":" + service_port + query
@@ -137,38 +68,71 @@ def simulation_netflix(hostip, service_port, ID, SERVICE_COMPTER):
     print("ID = " + ID + "end: " + str(number) + "--netflix")
     browser.close()
 
-range
-# simulation_test_youtube("172.17.0.10","9999","5","13","23","33")
-# simulation_test_netflix("172.17.0.11","8888","5","13")
+def request_simulation(youtube_ip,netflix_ip,ID,generator_zipf):
+    # 70 percent to request youtube, 30 percent to request netflix
+    i = random.randint(1,10)
+    if i <= 7 :
+        simulation_youtube(youtube_ip,YOUTUBE_SERVICE_PORT,ID,generator_zipf)
+    else:
+        simulation_netflix(netflix_ip,NETFLIX_SERVICE_PORT,ID,generator_zipf)
 
-def request_simulation(youtube_ip,netflix_ip,ID):
+def request_graph(zipf_list, N):
+    left = list(range((int(N/10))))
+    zipf_list = zipf_list
+
+    height = []
+    tick_label = []
+    # prepare bar
+    for j in range((int(N/10))):
+        temp = 0
+        for i in range(j*10,(j+1)*10):
+            temp = temp + zipf_list[i]
+        height.append(temp)
+        tick_label.append("container-{}".format(str(j+1)))
+    plt.bar(left, height, tick_label = tick_label,
+            width=0.4)
+    # plt.show()
+    plt.title('request_distribution')
+    plt.savefig('../log/request_distribution.png')
     
-    for i in range(REQUEST_TIME):
-        simulation_youtube(youtube_ip,YOUTUBE_SERVICE_PORT,ID,i)
-        simulation_youtube(youtube_ip,YOUTUBE_SERVICE_PORT,ID,i)
-        simulation_netflix(netflix_ip,NETFLIX_SERVICE_PORT,ID,i)
-        sleep(WAIT_DURATION)
-
-def test():
-    ID = "test"
-    i = 1
-    simulation_youtube("172.17.0.7","9999",ID,i)
-    # simulation_netflix("172.17.0.6","8888",ID,i)
-
-
 if __name__ == "__main__":
-    log_file = open('run.log', 'a')
+
+    # read the input info
+    youtube_ip = sys.argv[1]
+    netflix_ip = sys.argv[2]
+    ID = sys.argv[3]
+
+
+    # demand fun_zipf generator 
+    generator_zipf = fun_zipf.ZipfGenerator(ZIPF_S,TOTAL_CONTENT_NUMBER)
+    
+    # print request distribution
+    zipf_list = generator_zipf.get_probability_list()
+    request_graph(zipf_list, TOTAL_CONTENT_NUMBER)
+
+    # set the log config and start time
+    log_file = open('../log/request_running.log', 'a')
     sys.stdout = log_file
     start_time = time.time()
+
+    # start requesting 
     print("ID = "+ str(sys.argv[1]) + "start time = %s seconds ---" % (start_time))
-    request_simulation(sys.argv[1],sys.argv[2],sys.argv[3])
+    while(True):
+        request_simulation(youtube_ip,netflix_ip,ID,generator_zipf)
+        time.sleep(WAIT_DURATION)
+
+        # check the existence of main simulation processe
+        output = subprocess.check_output("ps ax | grep graph_test.py", shell=True)
+        output = output.decode("utf-8")
+        output_args = shlex.split(output)
+        count = output_args.count("graph_test.py")
+        if(count == 2):
+            # the main process has finished, so this process will be ended too
+            break
+
+    # output the finish info
     print("ID = "+ str(sys.argv[1]) + "--- %s seconds ---" % (time.time() - start_time))
-    # test()
+    # close the log file
     log_file.close()
-    # time.sleep(5)
-    # print("para1:" + str(sys.argv[1]) + "  para2:" + str(sys.argv[2]))
-
-
-
 
 # duration estimation : (SERVICE_TIME + SERVICE_TIME + WAIT_DURATION + 15s) *  REQUEST_TIME

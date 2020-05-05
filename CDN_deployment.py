@@ -6,7 +6,8 @@ from kubernetes import client, config, watch
 from pick import pick
 import os
 import threading
-import control_center
+from control_center import control_center
+from volume_pool import volume_pool
 
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"
@@ -108,22 +109,13 @@ def initial():
 
     # set up the volumes
     # pvc config
-    volume_name_1 = "volume-claim-1"
-    volume_name_2 = "volume-claim-2"
-    volume_name_3 = "volume-claim-3"
-    volume_name_4 = "volume-claim-4"
-    volume_name_5 = "volume-claim-5"
-    volume_name_cloud_youtube = "volume-claim-cloud-youtube"
-    volume_name_cloud_netflix = "volume-claim-cloud-netflix"
+    list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
+                        "volume-claim-4","volume-claim-5","volume-claim-6",
+                        "volume-claim-7","volume-claim-8","volume-claim-9",
+                        "volume-claim-10",]
 
-    # # pvc create
-    # tools.pvc_create(core_v1_api,volume_name_1)
-    # tools.pvc_create(core_v1_api,volume_name_2)
-    # tools.pvc_create(core_v1_api,volume_name_3)
-    # tools.pvc_create(core_v1_api,volume_name_4)
-    # tools.pvc_create(core_v1_api,volume_name_5)
-    # tools.pvc_create(core_v1_api,volume_name_cloud_youtube)
-    # tools.pvc_create(core_v1_api,volume_name_cloud_netflix)
+    # instance of volume_pool, pvc creation
+    volume_pool_instance = volume_pool(core_v1_api,list_volume_name)
     time.sleep(8)
 
     # youtube control server, netflix control serveR
@@ -151,9 +143,15 @@ def initial():
     deployment_name_youtube_cloud = "youtube-cloud"
 
     # youtube deployments
-    deployment_youtube_1 = tools.youTube_deployment_object_create(PORT_RESERVED,volume_name_1,deployment_name_youtube_1)
-    deployment_youtube_2 = tools.youTube_deployment_object_create(PORT_RESERVED,volume_name_2,deployment_name_youtube_2)
-    deployment_youtube_cloud = tools.youTube_deployment_object_create(PORT_RESERVED,volume_name_cloud_youtube,deployment_name_youtube_cloud)
+    deployment_youtube_1 = tools.youTube_deployment_object_create(PORT_RESERVED,
+                                                                volume_pool_instance.volume_request(deployment_name_youtube_1),
+                                                                deployment_name_youtube_1)
+    deployment_youtube_2 = tools.youTube_deployment_object_create(PORT_RESERVED,
+                                                                volume_pool_instance.volume_request(deployment_name_youtube_2),
+                                                                deployment_name_youtube_2)
+    deployment_youtube_cloud = tools.youTube_deployment_object_create(PORT_RESERVED,
+                                                                volume_pool_instance.volume_request(deployment_name_youtube_cloud),
+                                                                deployment_name_youtube_cloud)
 
     # deploy the youtube deployments and update the pod's list after the creation
     tools.create_deployment(api_minikube,deployment_youtube_1)
@@ -174,9 +172,15 @@ def initial():
     deployment_name_netflix_cloud = "netflix-cloud"
 
     # netflix deployments
-    deployment_netflix_1 = tools.netflix_deployment_object_create(PORT_RESERVED,volume_name_3,deployment_name_netflix_1)
-    deployment_netflix_2 = tools.netflix_deployment_object_create(PORT_RESERVED,volume_name_4,deployment_name_netflix_2)
-    deployment_netflix_cloud = tools.netflix_deployment_object_create(PORT_RESERVED,volume_name_cloud_netflix,deployment_name_netflix_cloud)
+    deployment_netflix_1 = tools.netflix_deployment_object_create(PORT_RESERVED,
+                                                                volume_pool_instance.volume_request(deployment_name_netflix_1),
+                                                                deployment_name_netflix_1)
+    deployment_netflix_2 = tools.netflix_deployment_object_create(PORT_RESERVED,
+                                                                volume_pool_instance.volume_request(deployment_name_netflix_2),
+                                                                deployment_name_netflix_2)
+    deployment_netflix_cloud = tools.netflix_deployment_object_create(PORT_RESERVED,
+                                                                volume_pool_instance.volume_request(deployment_name_netflix_cloud),
+                                                                deployment_name_netflix_cloud)
 
     # deploy the netflix deployments and update the pod's list after the creation
     tools.create_deployment(api_minikube,deployment_netflix_1)
@@ -238,20 +242,6 @@ def simultaion():
     # start 15 cleint request simulation instances 
     # pass the youtube, netflix server IP address and ID of client  
     threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"002"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"003"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"004"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"005"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"006"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"007"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"008"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"009"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"010"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"011"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"012"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"013"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"014"),))
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"015"),))
 
     time.sleep(10)
     # monitoring 
@@ -274,7 +264,22 @@ def simultaion():
     control_center_instance.result_graph()
 
 if __name__ == '__main__':
-    # initial()
-    simultaion()
+    initial()
+    # simultaion()
     # stop_service()
     # test2() 
+
+
+# preapre volume pool 
+
+# random request 
+# preapre generator of allocation strategy 
+
+# update control center, result_graph, 
+# add graph of zipf distribution 
+# 
+# # start simulation 
+# 
+# 
+# 
+# make request waiting time to randome (distribution exponentiel) 

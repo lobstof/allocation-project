@@ -12,8 +12,11 @@ import random
 from random import randint
 # content number must be multiple of 10
 TOTAL_CONTENT_NUMBER = 60
+# the duration of the video
 SERVICE_DURATION = 40
-WAIT_DURATION = 8
+
+# each 1 second, the script will generate a new request to servers
+WAIT_DURATION = 1
 
 YOUTUBE_SERVICE_PORT = "9999"
 NETFLIX_SERVICE_PORT = "8888"
@@ -43,6 +46,7 @@ def simulation_youtube(hostip, service_port, ID,generator_zipf):
     print("ID = " + ID + "  number = %d" % number + "--youtube")
     url = "http://" + hostip + ":" + service_port + query
     browser.get(url)
+    # ..
     sleep(SERVICE_DURATION)
     print("ID = " + ID + "end: " + str(number) + "--youtube")
     browser.close()
@@ -118,11 +122,15 @@ if __name__ == "__main__":
     # start requesting 
     print("ID = "+ str(sys.argv[1]) + "start time = %s seconds ---" % (start_time))
     while(True):
+        # threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
         request_simulation(youtube_ip,netflix_ip,ID,generator_zipf)
+        
+        # https://www.themathcitadel.com/poisson-processes-and-data-loss/
+        # todo, make WAIT_DURATION a random value 
         time.sleep(WAIT_DURATION)
 
         # check the existence of main simulation processe
-        output = subprocess.check_output("ps ax | grep graph_test.py", shell=True)
+        output = subprocess.check_output("ps ax | grep CDN_de...py", shell=True)
         output = output.decode("utf-8")
         output_args = shlex.split(output)
         count = output_args.count("graph_test.py")

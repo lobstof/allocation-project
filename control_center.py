@@ -13,7 +13,7 @@ class control_center:
         self.ratio_list = []
         self.n_data_set = 0
 
-        self.best_ratio_total = 0
+        self.best_ratio_total = 50
 
         # server params
         self.youtube_hostip = youtube_hostip
@@ -100,6 +100,8 @@ class control_center:
         plt.title('ratio_request')
         plt.show()
         # plt.savefig('../log/ratio_request.png')
+
+
     
     def stream_monitor(self):
 
@@ -118,3 +120,13 @@ class control_center:
         
         with open(self.json_record_file, "w") as record_file:
             record_file.write(json.dumps(data_with_title))
+    
+# control_center_instance = control_center("record_json_data_test.json","state_youtube","state_netflix","1","2","3","4")
+
+# control_center_instance.get_ratio_to_cloud()
+# control_center_instance.get_ratio_to_cloud()
+# control_center_instance.get_ratio_to_cloud()
+
+# control_center_instance.result_graph()
+
+

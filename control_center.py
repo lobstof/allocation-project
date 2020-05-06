@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import update_list as up
 import asyncio
 
+import kubernetes
+import kubernetes_tools
+
+
+
 
 class control_center:
 
@@ -69,8 +74,6 @@ class control_center:
             else:
                 return False
         
-        
-
     def result_graph(self):
 
         # number of data set
@@ -133,15 +136,18 @@ class control_center:
         # print(data_with_title)
 
         # record ratio value to list
-        is_good_allocation = control_center_instance.get_ratio_to_cloud()
+        is_good_allocation = self.control_center_instance.get_ratio_to_cloud()
         return is_good_allocation
-    
 
 
-control_center_instance = control_center("record_json_data_test.json","state_youtube","state_netflix","localhost","3000","localhost","2000")
+
+
+
+
+# control_center_instance = control_center("record_json_data_test.json","state_youtube","state_netflix","localhost","3000","localhost","2000")
 
 # we will get a result value which indicates if this allocation is better or not 
-print(control_center_instance.stream_monitor())
+# print(control_center_instance.stream_monitor())
 
 # 
 # control_center_instance.get_ratio_to_cloud()
@@ -149,6 +155,6 @@ print(control_center_instance.stream_monitor())
 
 
 
-control_center_instance.result_graph()
+# control_center_instance.result_graph()
 
 

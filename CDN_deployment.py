@@ -3,7 +3,7 @@ import time
 import update_list as up
 import json
 from kubernetes import client, config, watch
-from pick import pick
+# from pick import pick
 import os
 import threading
 from control_center import control_center

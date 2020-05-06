@@ -84,6 +84,31 @@ function jsonReader(filePath, cb) {
     })
 }
 
+function reset_counter() {
+    jsonReader('list.json', (err, pods) => {
+        if (err) throw false;
+        // console.log("pods read sucess1");
+        i = 0;
+        while (i < 5) {
+            pods[i].request_number = 0;
+            i++;
+        }
+        pods[5].total_request_number = 0;
+        // console.log("pods read sucess2");
+
+
+        fs.writeFile('./list.json', JSON.stringify(pods), function (err) {
+            if (err) {
+                // console.log('There has been an error saving your configuration data.');
+                console.log(err.message);
+                return;
+            }
+            console.log('counter reset successfully.')
+        });
+        return true;
+    });
+}
+
 function update_list(_name, _ip_address, _port, _status) {
     // console.log(_status)
 
@@ -156,6 +181,15 @@ const server = http.createServer((req, res) => {
                 res.end();
                 console.log("end of check list");
             });
+        } else if (q.resetcounter == "true"){
+            reset_counter();
+            // todo : verify the parm value returned of build_list()
+            // if == true -> res.statusCode = 200
+            // if == tfalse -> 412 (mission failed)
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end();
+            console.log("end of reset the counters of list");
         } else {
             // todo : verify the parms aren't void 
             update_list(_name, _ip_address, _port, _status);

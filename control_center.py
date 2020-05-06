@@ -1,6 +1,7 @@
 import json
 import matplotlib.pyplot as plt
 import update_list as up
+import asyncio
 
 
 class control_center:
@@ -13,7 +14,7 @@ class control_center:
         self.ratio_list = []
         self.n_data_set = 0
 
-        self.best_ratio_total = 50
+        self.best_ratio_total = 100
 
         # server params
         self.youtube_hostip = youtube_hostip
@@ -57,9 +58,18 @@ class control_center:
 
             ratio_to_cloud_total = (request_to_cloud_youtube + request_to_cloud_netflix) / (request_total_youtube + request_total_netflix) * 100
             ratio_to_cloud_list.append(ratio_to_cloud_total)
+            
+            self.ratio_list.append(ratio_to_cloud_list)
+            self.n_data_set = self.n_data_set + 1
 
-        self.ratio_list.append(ratio_to_cloud_list)
-        self.n_data_set = self.n_data_set + 1
+            # update the best_ratio_total
+            if  ratio_to_cloud_total < self.best_ratio_total :
+                self.best_ratio_total = ratio_to_cloud_total
+                return True
+            else:
+                return False
+        
+        
 
     def result_graph(self):
 
@@ -97,10 +107,9 @@ class control_center:
     
         plt.bar(left, height, tick_label = tick_label,
                 width=0.4)
-        plt.title('ratio_request')
+        plt.title('ratio_request' + '   the lowest ratio = ' + str(self.best_ratio_total))
         plt.show()
         # plt.savefig('../log/ratio_request.png')
-
 
     
     def stream_monitor(self):
@@ -108,25 +117,38 @@ class control_center:
         # youtube
         print("stream_monitor_youtube")
         context_youtube = up.check_list(self.youtube_hostip, self.youtube_service_port)
-        record_json_youtube = json.load(context_youtube)
-
+        context_youtube = context_youtube.decode("utf-8")
+        record_json_youtube = json.loads(context_youtube)
 
         # netflix
         print("stream_monitor_netflix")
         context_netflix = up.check_list(self.netflix_hostip, self.netflix_service_port)
-        record_json_netflix = json.load(context_netflix)
+        context_netflix = context_netflix.decode("utf-8")
+        record_json_netflix = json.loads(context_netflix)
 
         data_with_title = {self.name_state_youtube : record_json_youtube, self.name_state_netflix : record_json_netflix}
         
         with open(self.json_record_file, "w") as record_file:
             record_file.write(json.dumps(data_with_title))
+        # print(data_with_title)
+
+        # record ratio value to list
+        is_good_allocation = control_center_instance.get_ratio_to_cloud()
+        return is_good_allocation
     
-# control_center_instance = control_center("record_json_data_test.json","state_youtube","state_netflix","1","2","3","4")
 
-# control_center_instance.get_ratio_to_cloud()
+
+control_center_instance = control_center("record_json_data_test.json","state_youtube","state_netflix","localhost","3000","localhost","2000")
+
+# we will get a result value which indicates if this allocation is better or not 
+print(control_center_instance.stream_monitor())
+
+# 
 # control_center_instance.get_ratio_to_cloud()
 # control_center_instance.get_ratio_to_cloud()
 
-# control_center_instance.result_graph()
+
+
+control_center_instance.result_graph()
 
 

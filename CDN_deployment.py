@@ -270,10 +270,10 @@ if __name__ == '__main__':
     # test2() 
 
 
-# preapre volume pool 
 
 # random request 
 # preapre generator of allocation strategy 
+# add decition part into generator
 
 # update control center, result_graph, 
 # add graph of zipf distribution 

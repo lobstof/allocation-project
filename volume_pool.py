@@ -7,7 +7,7 @@ PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"
 
 
-class volume_pool:
+class k8s_automation_tool:
     def __init__(self,core_v1_api,api_minikube,list_volume_name,youtube_hostip,youtube_service_port,netflix_hostip,netflix_service_port):
         self.core_v1_api = core_v1_api
         self.api_minikube = api_minikube
@@ -114,8 +114,8 @@ class volume_pool:
             # we name each pod by its order
             pod_tag = len(self.youtube_deployed_name_list)
 
-            # we can only allocate up to 4 pods
-            if pod_tag >= 4:
+            # we can only allocate up to 5 pods (including cloud pod)
+            if pod_tag >= 5:
                 return False
             
             pod_name = "youtube-" + str(pod_tag+1)
@@ -140,6 +140,7 @@ class volume_pool:
 
             # update the pod list of the youtube_server
             self.youtube_list_add_pod(pod_name)
+            time.sleep(1)
             return True
 
         else:
@@ -147,8 +148,8 @@ class volume_pool:
             # we name this pod by its order
             pod_tag = len(self.netflix_deployed_name_list)
 
-            # we can only allocate up to 4 pods
-            if pod_tag >= 4:
+            # we can only allocate up to 5 pods (including cloud pod)
+            if pod_tag >= 5:
                 return False
 
             pod_name = "netflix-" + str(pod_tag+1)
@@ -161,20 +162,28 @@ class volume_pool:
                                         PORT_RESERVED,
                                         volume_name,
                                         pod_name)
+
+            # deploy the deployment object
+            tools.create_deployment(self.api_minikube,temp_deployment_object)
+            # wating deployement finished
+            time.sleep(5)
+
             # netflix-* created successfully 
             # add this new deployment to the pods list
             self.netflix_deployed_name_list.append(pod_name)
 
             # update the pod list of the netflix_server
             self.netflix_list_add_pod(pod_name)
+            time.sleep(1)
             return True
     
     def delete_one_pod(self,cdn_name):
         if cdn_name == "youtube":
             # we are going to delete the latest added pod
 
-            if len(self.youtube_deployed_name_list) == 0:
+            if len(self.youtube_deployed_name_list) <= 1:
                 # there is no more pod existed
+                # we can't delete cloud pod
                 return False
 
             pod_name = self.youtube_deployed_name_list.pop()
@@ -188,14 +197,16 @@ class volume_pool:
 
             # update youtube server list
             self.youtube_list_delete_pod(pod_name)
+            time.sleep(1)
             return True
 
         else:
             # cdn_name = netflix
             # we are going to delete the latest added pod
 
-            if len(self.netflix_deployed_name_list) == 0:
+            if len(self.netflix_deployed_name_list) <= 1:
                 # there is no more pod existed
+                # we can't delete cloud pod
                 return False
 
             pod_name = self.netflix_deployed_name_list.pop()
@@ -209,15 +220,85 @@ class volume_pool:
 
             # update youtube server list
             self.netflix_list_delete_pod(pod_name)
+            time.sleep(1)
             return True
             
 
     
+# self,core_v1_api,api_minikube,list_volume_name,youtube_hostip,youtube_service_port,netflix_hostip,netflix_service_port
+
+def test_code():
+    #load k8s config
+    config.load_kube_config()
+    #get api instance
+    api_minikube = client.AppsV1Api()
+    core_v1_api = client.CoreV1Api()
+
+    # list_volume_name = ["volume-claim-1","volume-claim-2"]
+
+    list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
+                            "volume-claim-4","volume-claim-5"]
+
+    # list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
+    #                         "volume-claim-4","volume-claim-5","volume-claim-6",
+    #                         "volume-claim-7","volume-claim-8","volume-claim-9",
+    #                         "volume-claim-10"]
+
+    youtube_hostip = "192.168.5.140"
+    youtube_service_port = "3000"
+    netflix_hostip = "192.168.5.140"
+    netflix_service_port = "2000"
+
+    # initial the lists of two servers 
+    up.initial_list(youtube_hostip,youtube_service_port)
+    up.initial_list(netflix_hostip,netflix_service_port)
+
+
+    # volume pool preapre 
+    k8s_automation_tool_instance = k8s_automation_tool(core_v1_api,api_minikube,
+                                        list_volume_name,youtube_hostip,
+                                        youtube_service_port,netflix_hostip,
+                                        netflix_service_port)
+
+
+    # chanmps test
+    print("volume_availabel_pool :")
+    print(k8s_automation_tool_instance.volume_availabel_pool)
+
+    # deploying 
+    k8s_automation_tool_instance.deploy_one_pod("youtube")
+    k8s_automation_tool_instance.deploy_one_pod("youtube")
+    k8s_automation_tool_instance.deploy_one_pod("netflix")
+    k8s_automation_tool_instance.deploy_one_pod("youtube")
+    # k8s_automation_tool_instance.deploy_one_pod("youtube")
 
 
 
+    print("youtube deployed")
+    print(k8s_automation_tool_instance.youtube_deployed_name_list)
 
-# list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
-#                         "volume-claim-4","volume-claim-5","volume-claim-6",
-#                         "volume-claim-7","volume-claim-8","volume-claim-9",
-#                         "volume-claim-10",]
+    print("netflix deployed")
+    print(k8s_automation_tool_instance.netflix_deployed_name_list)
+
+    print("volume_pod_paire")
+    print(k8s_automation_tool_instance.volume_pod_paire)
+
+
+    # modification
+    result1 = k8s_automation_tool_instance.delete_one_pod("netflix")
+    print("result1 = " + str(result1))
+
+    result2= k8s_automation_tool_instance.delete_one_pod("youtube")
+    print("result2 = " + str(result2))
+
+    print("youtube deployed")
+    print(k8s_automation_tool_instance.youtube_deployed_name_list)
+
+    print("netflix deployed")
+    print(k8s_automation_tool_instance.netflix_deployed_name_list)
+
+    print("volume_pod_paire")
+    print(k8s_automation_tool_instance.volume_pod_paire)
+
+
+

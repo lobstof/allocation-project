@@ -341,6 +341,40 @@ def delete_all_deployments(api_instance):
     for item in deployments:
         delete_deployment(api_instance,item)
 
+def get_pvc_list():
+    config.load_kube_config()
+    core_v1_api = client.CoreV1Api()
+    print("Listing pvcs")
+    ret = core_v1_api.list_namespaced_persistent_volume_claim("default")
+    pvcs = []
+    # ret = thead.get()
+    for item in ret.items:
+        print(
+            "%s\t%s" %
+            (item.metadata.namespace,
+             item.metadata.name))
+        pvcs.append(item.metadata.name)
+    print("------------")
+    # print(deployments)
+
+    # return the deployments
+    return pvcs
+
+def delete_pvc(core_v1_apim, name_pvc):
+    # delete pvc
+    core_response = core_v1_apim.delete_namespaced_persistent_volume_claim(name_pvc,"default")
+    print("PVC deleted. status='%s'" % str(core_response.status))
+
+
+def delete_all_pvcs():
+    config.load_kube_config()
+    core_v1_api = client.CoreV1Api()
+    pvcs_list = get_pvc_list()
+    
+    for pvc_name in pvcs_list:
+        delete_pvc(core_v1_api, pvc_name)
+
+
 def test():
     config.load_kube_config()
     api_minikube = client.AppsV1Api()

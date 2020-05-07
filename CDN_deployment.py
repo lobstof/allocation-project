@@ -7,7 +7,8 @@ from kubernetes import client, config, watch
 import os
 import threading
 from control_center import control_center
-from volume_pool import volume_pool
+from volume_pool import k8s_automation_tool
+from decision_center import decision_center
 
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"
@@ -105,20 +106,9 @@ def service_config():
 
 def initial():
     
-    # todo clean all the existing pods, service, pv and pvc
+    #prepare youtube and netflix server
 
-    # set up the volumes
-    # pvc config
-    list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
-                        "volume-claim-4","volume-claim-5","volume-claim-6",
-                        "volume-claim-7","volume-claim-8","volume-claim-9",
-                        "volume-claim-10",]
-
-    # instance of volume_pool, pvc creation
-    volume_pool_instance = volume_pool(core_v1_api,list_volume_name)
-    time.sleep(8)
-
-    # youtube control server, netflix control serveR
+    # youtube control server, netflix control server
     deployment_youtube_server = tools.youTube_control_deployment_object_create(PORT_RESERVED)    
     deployment_netflix_server = tools.netflix_control_deployment_object_create(PORT_RESERVED)
 
@@ -137,63 +127,52 @@ def initial():
     print("NETFLIX_SERVER_IP = " + NETFLIX_SERVER_IP)
     time.sleep(4)
 
-    # 2 local youtube containers with one cloud youtube server container
-    deployment_name_youtube_1 = "youtube-1"
-    deployment_name_youtube_2 = "youtube-2"
+    # set up the volumes
+    # pvc config
+    list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
+                        "volume-claim-4","volume-claim-5","volume-claim-6",
+                        "volume-claim-7","volume-claim-8","volume-claim-9",
+                        "volume-claim-10",]
+
+    # volume pool preapre 
+    k8s_automation_tool_instance = k8s_automation_tool(core_v1_api,api_minikube,
+                                        list_volume_name,YOUTUBE_SERVER_IP,
+                                        YOUTUBE_SERVER_PORT,NETFLIX_SERVER_IP,
+                                        NETFLIX_SERVER_PORT)
+    time.sleep(4)
+
+    # preapre cdn pods of for youtube_cloud and netflix cloud
+
+    # youtube-cloud
     deployment_name_youtube_cloud = "youtube-cloud"
-
-    # youtube deployments
-    deployment_youtube_1 = tools.youTube_deployment_object_create(PORT_RESERVED,
-                                                                volume_pool_instance.volume_request(deployment_name_youtube_1),
-                                                                deployment_name_youtube_1)
-    deployment_youtube_2 = tools.youTube_deployment_object_create(PORT_RESERVED,
-                                                                volume_pool_instance.volume_request(deployment_name_youtube_2),
-                                                                deployment_name_youtube_2)
     deployment_youtube_cloud = tools.youTube_deployment_object_create(PORT_RESERVED,
-                                                                volume_pool_instance.volume_request(deployment_name_youtube_cloud),
+                                                                k8s_automation_tool_instance.volume_request(deployment_name_youtube_cloud),
                                                                 deployment_name_youtube_cloud)
-
-    # deploy the youtube deployments and update the pod's list after the creation
-    tools.create_deployment(api_minikube,deployment_youtube_1)
-    time.sleep(5)
-    youtube_list_add_pod(core_v1_api,deployment_name_youtube_1)
-
-    tools.create_deployment(api_minikube,deployment_youtube_2)
-    time.sleep(5)
-    youtube_list_add_pod(core_v1_api,deployment_name_youtube_2)
-
     tools.create_deployment(api_minikube,deployment_youtube_cloud)
     time.sleep(5)
+    # update the youtube server's list
     youtube_list_add_pod(core_v1_api,deployment_name_youtube_cloud)
 
-    # 2 local netflix containers with one cloud netflix server container
-    deployment_name_netflix_1 = "netflix-1"
-    deployment_name_netflix_2 = "netflix-2"
+
+    # netflix-cloud
     deployment_name_netflix_cloud = "netflix-cloud"
-
-    # netflix deployments
-    deployment_netflix_1 = tools.netflix_deployment_object_create(PORT_RESERVED,
-                                                                volume_pool_instance.volume_request(deployment_name_netflix_1),
-                                                                deployment_name_netflix_1)
-    deployment_netflix_2 = tools.netflix_deployment_object_create(PORT_RESERVED,
-                                                                volume_pool_instance.volume_request(deployment_name_netflix_2),
-                                                                deployment_name_netflix_2)
     deployment_netflix_cloud = tools.netflix_deployment_object_create(PORT_RESERVED,
-                                                                volume_pool_instance.volume_request(deployment_name_netflix_cloud),
+                                                                k8s_automation_tool_instance.volume_request(deployment_name_netflix_cloud),
                                                                 deployment_name_netflix_cloud)
-
-    # deploy the netflix deployments and update the pod's list after the creation
-    tools.create_deployment(api_minikube,deployment_netflix_1)
-    time.sleep(5)
-    netflix_list_add_pod(core_v1_api,deployment_name_netflix_1)
-
-    tools.create_deployment(api_minikube,deployment_netflix_2)
-    time.sleep(5)
-    netflix_list_add_pod(core_v1_api,deployment_name_netflix_2)
-
     tools.create_deployment(api_minikube,deployment_netflix_cloud)
     time.sleep(5)
+    # update the netflix server's list
     netflix_list_add_pod(core_v1_api,deployment_name_netflix_cloud)
+
+    # deploy inital cdn pods 
+    # we are going to deploy one youtube-container(youtube-1) and one netflix-container(netflix-1)
+    k8s_automation_tool_instance.deploy_one_pod("youtube")
+    k8s_automation_tool_instance.deploy_one_pod("netflix")
+
+    return k8s_automation_tool_instance
+
+
+    
 
 def allocation_to_youtube_3():
     volume_name = "volume-claim-5"
@@ -220,17 +199,21 @@ def stop_service():
     config.load_kube_config()
     api_minikube = client.AppsV1Api()
 
-    print("Deleting all the deployments ...")
+    print("deleting all the deployments ...")
     #delete all the deployments 
     tools.delete_all_deployments(api_minikube)
-    print("Deleted")
+    print("deployments Deleted")
+
+    print("deleting all the pvcs")
+    tools.delete_all_pvcs()
+    print("pvcs deleted")
 
 def simultaion():
 
     # We start with an initial allocation
-    # 2 pods for YouYube, 3 pods for Netflix
-    initial()
-    print("initialization finish")
+    # 1 pod for YouYube, 1 pod for Netflix
+    k8s_automation_tool_instance = initial()
+    print("initialization finished")
 
     # demande an instance of controle_center
     control_center_instance = control_center("record.json","state_youtube",
@@ -239,35 +222,63 @@ def simultaion():
                                             NETFLIX_SERVER_PORT)
     print("serving ...")
 
-    # start 15 cleint request simulation instances 
     # pass the youtube, netflix server IP address and ID of client  
-    threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
+    threading._start_new_thread(os.system, ("python ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
+    time.sleep(20)
 
-    time.sleep(10)
     # monitoring 
     control_center_instance.stream_monitor()
-    time.sleep(3)
-    control_center_instance.get_ratio_to_cloud()
-    
-    # We then perturb it: we remove one container to CP1 and give a container to CP2.
-    de_allocation_to_netflix_2()
-    time.sleep(5)
-    allocation_to_youtube_3()
+    # time.sleep(3)
 
-    print("serving ...")
-    time.sleep(10)
-    # monitoring 
-    control_center_instance.stream_monitor()
-    time.sleep(3)
-    control_center_instance.get_ratio_to_cloud()
+    # re-allocation loop
+    # re-allocation time
+    # until now, we have one normal youtube cdn container and one normal netflix cdn container
+    decision_center_instance = decision_center(1,1)
+
+    N_time = 2
+    SERVERING_DURATION = 20
+    for i in range (N_time):
+        decision_dict = decision_center_instance.decision_generate()
+
+        decision_object1 = list(decision_dict.keys())[0]
+        decision_operation1 = list(decision_dict.values())[0]
+
+        decision_object2 = list(decision_dict.keys())[0]
+        decision_operation2 = list(decision_dict.values())[0]
+
+        if decision_operation1 == "add":
+            k8s_automation_tool_instance.deploy_one_pod(decision_object1)
+        elif decision_operation1 == "delete":
+            k8s_automation_tool_instance.delete_one_pod(decision_object1)
+        else:
+            # something wrong
+            continue
+
+        if decision_operation2 == "add":
+            k8s_automation_tool_instance.deploy_one_pod(decision_object2)
+        elif decision_operation2 == "delete":
+            k8s_automation_tool_instance.delete_one_pod(decision_object2)
+        else:
+            # something wrong
+            continue
+         # refresh the server's counter
+        up.resetcounter_list(YOUTUBE_SERVER_IP, YOUTUBE_SERVER_PORT)
+        up.resetcounter_list(NETFLIX_SERVER_IP, NETFLIX_SERVER_PORT)
+
+        # serving time
+        time.sleep(SERVERING_DURATION)
+        # monitoring
+        control_center_instance.stream_monitor()
+        # time.sleep(3)
 
     control_center_instance.result_graph()
 
 if __name__ == '__main__':
-    initial()
-    # simultaion()
+    # initial()
+    simultaion()
     # stop_service()
     # test2() 
+    # time.sleep(100)
 
 
 
@@ -279,7 +290,5 @@ if __name__ == '__main__':
 # add graph of zipf distribution 
 # 
 # # start simulation 
-# 
-# 
 # 
 # make request waiting time to randome (distribution exponentiel) 

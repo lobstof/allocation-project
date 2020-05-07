@@ -2,6 +2,8 @@ import json
 import matplotlib.pyplot as plt
 import update_list as up
 import asyncio
+import time
+import random
 
 import kubernetes
 import kubernetes_tools
@@ -111,8 +113,20 @@ class control_center:
         plt.bar(left, height, tick_label = tick_label,
                 width=0.4)
         plt.title('ratio_request' + '   the lowest ratio = ' + str(self.best_ratio_total))
-        plt.show()
-        # plt.savefig('../log/ratio_request.png')
+        # plt.show()
+        # attach a random number to result's name (as a tag)
+        ran_tag = str(random.randint(1,999))
+        plt.savefig('./log/ratio_request{}.png'.format(ran_tag))
+
+        # todo convert the result data and operation records into JSON formal
+        # and then transfer them to the file
+        
+        # data_log_file = open('./log/ratio_request_raw_data{}.txt'.format(ran_tag),'w')
+        # data_log_file.write(ratio_list)
+        # data_log_file.close()
+        # also we need to record the raw data
+        
+        
 
     
     def stream_monitor(self):
@@ -136,9 +150,11 @@ class control_center:
         # print(data_with_title)
 
         # record ratio value to list
-        is_good_allocation = self.control_center_instance.get_ratio_to_cloud()
+        is_good_allocation = self.get_ratio_to_cloud()
         return is_good_allocation
 
+
+# todo refresh the lists of netflix server and youtube server 
 
 
 

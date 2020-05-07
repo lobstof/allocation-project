@@ -5,10 +5,10 @@ import random
 # todo renforcement learning 
 
 class decision_center:
-    def __init__(self,default_deployments_name_list):
+    def __init__(self,deployed_youtube_available,deployed_netflix_available):
         
-        self.deployed_youtube_available = 0
-        self.deployed_netflix_available = 0
+        self.deployed_youtube_available = deployed_youtube_available
+        self.deployed_netflix_available = deployed_netflix_available
     
     def youtube_add(self):
         self.deployed_youtube_available = self.deployed_youtube_available + 1

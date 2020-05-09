@@ -1,0 +1,256 @@
+damu@damu-virtual-machine:~/Documents/kubernet/project/CDN_project/allocation_project/Q_learning$ python q_learning_decision.py 
+/usr/local/lib/python3.8/site-packages/pandas/compat/__init__.py:117: UserWarning: Could not import the lzma module. Your installed Python is incomplete. Attempting to use lzma compression will result in a RuntimeError.
+  warnings.warn(msg)
+*******************************
+episode start = 0
+state: 0
+action takeny0_n0
+score real time = 0.0
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 20
+action takenya1_n0
+score real time = 52.65
+state: 10
+action takenyd1_n0
+score real time = 32.4
+state: 20
+action takenya1_n0
+score real time = 52.65
+state: 21
+action takeny0_na1
+score real time = 52.65
+state: 20
+action takeny0_nd1
+score real time = 52.65
+state: 21
+action takeny0_na1
+score real time = 52.65
+state: 12
+action takenyd1_na1
+score real time = 32.4
+state: 21
+action takenya1_nd1
+score real time = 52.65
+state: 21
+action takeny0_n0
+score real time = 52.65
+state: 22
+action takeny0_na1
+score real time = 52.65
+state: 13
+action takenyd1_na1
+score real time = 32.4
+state: 12
+action takeny0_nd1
+score real time = 32.4
+state: 21
+action takenya1_nd1
+score real time = 52.65
+state: 31
+action takenya1_n0
+score real time = 68.85
+state: 31
+action takeny0_n0
+score real time = 68.85
+state: 31
+action takeny0_n0
+score real time = 68.85
+state: 22
+action takenyd1_na1
+score real time = 52.65
+state: 31
+action takenya1_nd1
+score real time = 68.85
+state: 30
+action takeny0_nd1
+score real time = 68.85
+state: 21
+action takenyd1_na1
+score real time = 52.65
+state: 31
+action takenya1_n0
+score real time = 68.85
+state: 31
+action takeny0_n0
+score real time = 68.85
+state: 21
+action takenyd1_n0
+score real time = 52.65
+state: 31
+action takenya1_n0
+score real time = 68.85
+state: 30
+action takeny0_nd1
+score real time = 68.85
+state: 30
+action takeny0_n0
+score real time = 68.85
+state: 40
+action takenya1_n0
+score real time = 75.33000000000001
+episode = 0
+state end = 40
+score end = 75.33000000000001
+*******************************
+episode start = 1
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 20
+action takenya1_n0
+score real time = 52.65
+state: 20
+action takeny0_n0
+score real time = 52.65
+state: 11
+action takenyd1_na1
+score real time = 32.4
+state: 10
+action takeny0_nd1
+score real time = 32.4
+state: 0
+action takenyd1_n0
+score real time = 0.0
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 20
+action takenya1_n0
+score real time = 52.65
+state: 31
+action takenya1_na1
+score real time = 68.85
+state: 31
+action takeny0_n0
+score real time = 68.85
+state: 20
+action takenyd1_nd1
+score real time = 52.65
+state: 21
+action takeny0_na1
+score real time = 52.65
+state: 31
+action takenya1_n0
+score real time = 68.85
+state: 31
+action takeny0_n0
+score real time = 68.85
+state: 40
+action takenya1_nd1
+score real time = 75.33000000000001
+episode = 1
+state end = 40
+score end = 75.33000000000001
+*******************************
+episode start = 2
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 20
+action takenya1_n0
+score real time = 52.65
+state: 31
+action takenya1_na1
+score real time = 68.85
+state: 40
+action takenya1_nd1
+score real time = 75.33000000000001
+episode = 2
+state end = 40
+score end = 75.33000000000001
+*******************************
+episode start = 3
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 20
+action takenya1_n0
+score real time = 52.65
+state: 31
+action takenya1_na1
+score real time = 68.85
+state: 40
+action takenya1_nd1
+score real time = 75.33000000000001
+episode = 3
+state end = 40
+score end = 75.33000000000001
+*******************************
+episode start = 4
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 20
+action takenya1_n0
+score real time = 52.65
+state: 31
+action takenya1_na1
+score real time = 68.85
+state: 40
+action takenya1_nd1
+score real time = 75.33000000000001
+episode = 4
+state end = 40
+score end = 75.33000000000001
+*******************************
+episode start = 5
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 21
+action takenya1_na1
+score real time = 52.65
+state: 31
+action takenya1_n0
+score real time = 68.85
+state: 40
+action takenya1_nd1
+score real time = 75.33000000000001
+episode = 5
+state end = 40
+score end = 75.33000000000001
+*******************************
+episode start = 6
+state: 10
+action takenya1_n0
+score real time = 32.4
+state: 1
+action takenyd1_na1
+score real time = 0.0
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/indexes/base.py", line 2646, in get_loc
+    return self._engine.get_loc(key)
+  File "pandas/_libs/index.pyx", line 111, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 138, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 998, in pandas._libs.hashtable.Int64HashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1005, in pandas._libs.hashtable.Int64HashTable.get_item
+KeyError: -8
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "q_learning_decision.py", line 203, in <module>
+    q_table = rl()
+  File "q_learning_decision.py", line 188, in rl
+    q_target = R + GAMMA * q_table.loc[S_, :].max()
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/indexing.py", line 1762, in __getitem__
+    return self._getitem_tuple(key)
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/indexing.py", line 1272, in _getitem_tuple
+    return self._getitem_lowerdim(tup)
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/indexing.py", line 1389, in _getitem_lowerdim
+    section = self._getitem_axis(key, axis=i)
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/indexing.py", line 1965, in _getitem_axis
+    return self._get_label(key, axis=axis)
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/indexing.py", line 625, in _get_label
+    return self.obj._xs(label, axis=axis)
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/generic.py", line 3537, in xs
+    loc = self.index.get_loc(key)
+  File "/usr/local/lib/python3.8/site-packages/pandas/core/indexes/base.py", line 2648, in get_loc
+    return self._engine.get_loc(self._maybe_cast_indexer(key))
+  File "pandas/_libs/index.pyx", line 111, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 138, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 998, in pandas._libs.hashtable.Int64HashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 1005, in pandas._libs.hashtable.Int64HashTable.get_item
+KeyError: -8

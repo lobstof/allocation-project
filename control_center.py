@@ -82,7 +82,7 @@ class control_center:
                 self.best_ratio_total = ratio_to_cloud_total
             
             # return the total ratio to local
-            return (1 - ratio_to_cloud_total)
+            return (100 - ratio_to_cloud_total)
         
     def result_graph(self):
 
@@ -128,11 +128,13 @@ class control_center:
 
         # todo convert the result data and operation records into JSON formal
         # and then transfer them to the file
-        
-        # data_log_file = open('./log/ratio_request_raw_data{}.txt'.format(ran_tag),'w')
-        # data_log_file.write(ratio_list)
-        # data_log_file.close()
-        # also we need to record the raw data
+        data_list = self.ratio_list
+        file = open('ratio_list_record.json', 'w')
+        for i in data_list:
+            json_i = json.dumps(i)
+            file.write(json_i+'\n')
+        file.close()
+       
         
         
 
@@ -155,6 +157,8 @@ class control_center:
         
         with open(self.json_record_file, "w") as record_file:
             record_file.write(json.dumps(data_with_title))
+            record_file.close()
+            time.sleep(2)
         # print(data_with_title)
 
         # record ratio value to list

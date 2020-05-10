@@ -182,7 +182,7 @@ class k8s_automation_tool:
         if cdn_name == "youtube":
             # we are going to delete the latest added pod
 
-            if len(self.youtube_deployed_name_list) <= 1:
+            if len(self.youtube_deployed_name_list) < 1:
                 # there is no more pod existed
                 # we can't delete cloud pod
                 return False
@@ -207,7 +207,7 @@ class k8s_automation_tool:
             # cdn_name = netflix
             # we are going to delete the latest added pod
 
-            if len(self.netflix_deployed_name_list) <= 1:
+            if len(self.netflix_deployed_name_list) < 1:
                 # there is no more pod existed
                 # we can't delete cloud pod
                 return False

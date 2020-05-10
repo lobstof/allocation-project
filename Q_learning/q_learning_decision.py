@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import time
+import json
 
 
 class q_learning_decision_center:
@@ -44,6 +45,7 @@ class q_learning_decision_center:
             columns=actions,
             index=states
         )
+        table.at[:,'y0_n0'] = -0.005
         # print(table)
         return table
 
@@ -241,8 +243,6 @@ class q_learning_decision_center:
 
         # update score list
         self.score_list.append(next_step_score)
-
-        print('state now: ' + str(self.real_time_state))
         A = self.action_next
         next_step_state = self.state_next
         R = next_step_score - self.real_time_score
@@ -256,6 +256,7 @@ class q_learning_decision_center:
         self.real_time_state = next_step_state  # move to next state
         # update the state list
         self.state_list.append(self.real_time_state)
+        print('state after: ' + str(self.real_time_state))
         self.step_counter += 1
     
     def action_generate(self):
@@ -269,53 +270,41 @@ class q_learning_decision_center:
         print("*********")
         self.state_next = S_
         return action_dict
+
+    def data_record(self):
+        
+        data_list1 = self.state_list
+        data_list2 = self.score_list
+        dict_state_score = {}
+
+        for i in range(min(len(data_list1),len(data_list2))):
+            dict_state_score.update({data_list1[i] : data_list2[i]})
+
+        file = open('state_score.json', 'w')
+        json_data = json.dumps(dict_state_score)
+        file.write(json_data)
+        file.close()
+
 # if __name__ == "__main__":
 #     q_learning_decision_center_instance = q_learning_decision_center()
-#     q_learning_decision_center_instance.rl()
-    # q_table = build_q_table(STATES, ACTIONS)
-    # # print(int(0%10))
-    # state = 3
-    # action = 'yd1_na1'
-    # result = is_action_allowed(state,action,q_table)
-    # print(result)
-    # print(str(int(-1 % 10)))
-    # S = 10
-    # S_ = 1
-    # action_dict = {}
-    # action_dict.update({"youtube" : "delete"})
-    # action_dict.update({"netflix" : "add"})
+#     print(q_learning_decision_center_instance.q_table)
 
-    # result = environment_simulator_feedback(action_dict, S_, S)
-    # print('result = ' + str(result))
+    # list_s = [-12,15,77,-22,-44,55,11,42,-12,-22]
+    # for i in range(10):
+    #     print("----------------------------")
+    #     print("state_now :")
+    #     print(q_learning_decision_center_instance.real_time_state)
 
-    # action = 'ya1_na1'
-    # state = 11 
-    # print(is_action_allowed(state, action, q_table))
-
-    # state = 11
-    # action = 'ya1_na1'
-    # (action_dict, state_next) = action_interpreter(state,action)
-    # n_youtube = int(state_next / 10)
-    # n_netflix = int(state_next % 10)
-
-    # print(n_netflix)
-    # print(n_youtube)
+    #     decision_dict = q_learning_decision_center_instance.action_generate()
+    #     print("action taken:")
+    #     print(decision_dict)
+    #     q_learning_decision_center_instance.rl_by_step(list_s[i])
+    #     print("state after :")
+    #     print(q_learning_decision_center_instance.real_time_state)
+    #     print("----------------------------")
 
 
-    # new_df1 = pd.DataFrame({'ya1_na1': [23]}, index=[11])
-    # new_df2 = pd.DataFrame({'yd1_nd1': [1]}, index=[11])
-    # new_df3 = pd.DataFrame({'ya1_nd1': [333]}, index=[11])
 
-    # q_table.update(new_df1)
-    # q_table.update(new_df2)
-    # q_table.update(new_df3)
-
-    # print(q_table)
-
-    # state_actions = q_table.loc[11, :].max()
-    # print(state_actions)
-    # action_name = state_actions[state_actions == state_actions.max()].index
-    # print(action_name)
 
 
 

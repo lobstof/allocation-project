@@ -7,7 +7,7 @@ from kubernetes import client, config, watch
 import os
 import threading
 from control_center import control_center
-from volume_pool import k8s_automation_tool
+from k8s_automation_tool import k8s_automation_tool
 from decision_center import decision_center
 from Q_learning.q_learning_decision import q_learning_decision_center
 
@@ -222,7 +222,7 @@ def simultaion():
 
     # pass the youtube, netflix server IP address and ID of client  
     threading._start_new_thread(os.system, ("python ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
-    time.sleep(30)
+    time.sleep(25)
 
     # monitoring 
     control_center_instance.stream_monitor()
@@ -241,10 +241,12 @@ def simultaion():
     # initial deployment is 1 youtube pod, 1 netflix pod
     q_learning_decision_center_instance = q_learning_decision_center(real_time_state=11)
 
-    N_time = 10
-    SERVERING_DURATION = 60
+    N_time = 20
+    MONITORING_DURATION = 50
     for i in range (N_time):
         # decision_dict = decision_center_instance.decision_generate()
+        print("state now : ")
+        print(q_learning_decision_center_instance.real_time_state)
         decision_dict = q_learning_decision_center_instance.action_generate()
         decision_object1 = list(decision_dict.keys())[0]
         decision_operation1 = list(decision_dict.values())[0]
@@ -277,7 +279,7 @@ def simultaion():
         up.resetcounter_list(NETFLIX_SERVER_IP, NETFLIX_SERVER_PORT)
 
         # serving time
-        time.sleep(SERVERING_DURATION)
+        time.sleep(MONITORING_DURATION)
         # monitoring
         ratio_to_local = control_center_instance.stream_monitor()
 
@@ -287,6 +289,12 @@ def simultaion():
 
     control_center_instance.result_graph()
     print(q_learning_decision_center_instance.state_list)
+
+    # recoding data
+    q_learning_decision_center_instance.data_record()
+    q_learning_decision_center_instance.q_table.to_csv("q_table", sep='\t')
+    q_learning_decision_center_instance.q_table.to_csv("q_table2")
+
 
 if __name__ == '__main__':
     # initial()
@@ -307,15 +315,5 @@ if __name__ == '__main__':
     # print(decision_object2)
     # print(decision_operation2)
 
-
-
-# random request 
-# preapre generator of allocation strategy 
-# add decition part into generator
-
-# update control center, result_graph, 
-# add graph of zipf distribution 
-# 
-# # start simulation 
-# 
+# todo:
 # make request waiting time to randome (distribution exponentiel) 

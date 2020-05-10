@@ -30,7 +30,7 @@ class control_center:
         self.netflix_service_port = netflix_service_port
 
     # ratio_to_cloud_list[0] = ratio_youtube, ratio_to_cloud_list[1] = ratio_netflix, ratio_to_cloud_list[2] = ratio_total
-    def get_ratio_to_cloud(self):
+    def get_ratio_to_local(self):
 
         ratio_to_cloud_list = []
         with open(self.json_record_file) as json_file:
@@ -70,11 +70,19 @@ class control_center:
             self.n_data_set = self.n_data_set + 1
 
             # update the best_ratio_total
+            # if  ratio_to_cloud_total < self.best_ratio_total :
+            #     self.best_ratio_total = ratio_to_cloud_total
+            #     return True
+            # else:
+            #     return False
+
+
+            # update the best_ratio_total
             if  ratio_to_cloud_total < self.best_ratio_total :
                 self.best_ratio_total = ratio_to_cloud_total
-                return True
-            else:
-                return False
+            
+            # return the total ratio to local
+            return (1 - ratio_to_cloud_total)
         
     def result_graph(self):
 
@@ -150,8 +158,8 @@ class control_center:
         # print(data_with_title)
 
         # record ratio value to list
-        is_good_allocation = self.get_ratio_to_cloud()
-        return is_good_allocation
+        ratio_to_local = self.get_ratio_to_local()
+        return ratio_to_local
 
 
 # todo refresh the lists of netflix server and youtube server 
@@ -166,8 +174,8 @@ class control_center:
 # print(control_center_instance.stream_monitor())
 
 # 
-# control_center_instance.get_ratio_to_cloud()
-# control_center_instance.get_ratio_to_cloud()
+# control_center_instance.get_ratio_to_local()
+# control_center_instance.get_ratio_to_local()
 
 
 

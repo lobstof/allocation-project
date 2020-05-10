@@ -132,7 +132,7 @@ class k8s_automation_tool:
             tools.create_deployment(self.api_minikube,temp_deployment_object)
             # wating deployement finished
             time.sleep(5)
-            
+            print("deplotment : " + pod_name + " deployed")
 
             # youtube-* created successfully 
             # add this new deployment to the pods list
@@ -167,6 +167,7 @@ class k8s_automation_tool:
             tools.create_deployment(self.api_minikube,temp_deployment_object)
             # wating deployement finished
             time.sleep(5)
+            print("deplotment : " + pod_name + " deployed")
 
             # netflix-* created successfully 
             # add this new deployment to the pods list
@@ -198,6 +199,8 @@ class k8s_automation_tool:
             # update youtube server list
             self.youtube_list_delete_pod(pod_name)
             time.sleep(1)
+            print("deplotment : " + pod_name + " deleted")
+
             return True
 
         else:
@@ -221,6 +224,8 @@ class k8s_automation_tool:
             # update youtube server list
             self.netflix_list_delete_pod(pod_name)
             time.sleep(1)
+            print("deplotment : " + pod_name + " deleted")
+
             return True
             
 

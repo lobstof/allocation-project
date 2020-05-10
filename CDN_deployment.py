@@ -9,6 +9,7 @@ import threading
 from control_center import control_center
 from volume_pool import k8s_automation_tool
 from decision_center import decision_center
+from Q_learning.q_learning_decision import q_learning_decision_center
 
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"
@@ -171,9 +172,6 @@ def initial():
 
     return k8s_automation_tool_instance
 
-
-    
-
 def allocation_to_youtube_3():
     volume_name = "volume-claim-5"
     deployment_name = "youtube-3"
@@ -224,7 +222,7 @@ def simultaion():
 
     # pass the youtube, netflix server IP address and ID of client  
     threading._start_new_thread(os.system, ("python ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
-    time.sleep(20)
+    time.sleep(30)
 
     # monitoring 
     control_center_instance.stream_monitor()
@@ -233,52 +231,81 @@ def simultaion():
     # re-allocation loop
     # re-allocation time
     # until now, we have one normal youtube cdn container and one normal netflix cdn container
-    decision_center_instance = decision_center(1,1)
+    # decision_center_instance = decision_center(1,1)
+    
+    # model parms 
+    # N_PODS_TOTAL -- the total pods that we can deploy (the max volume amount)
+    # EPSILON -- greedy police
+    # ALPHA -- learning rate
+    # GAMMA --discount factor
+    # initial deployment is 1 youtube pod, 1 netflix pod
+    q_learning_decision_center_instance = q_learning_decision_center(real_time_state=11)
 
-    N_time = 2
-    SERVERING_DURATION = 20
+    N_time = 10
+    SERVERING_DURATION = 60
     for i in range (N_time):
-        decision_dict = decision_center_instance.decision_generate()
-
+        # decision_dict = decision_center_instance.decision_generate()
+        decision_dict = q_learning_decision_center_instance.action_generate()
         decision_object1 = list(decision_dict.keys())[0]
         decision_operation1 = list(decision_dict.values())[0]
 
-        decision_object2 = list(decision_dict.keys())[0]
-        decision_operation2 = list(decision_dict.values())[0]
+        decision_object2 = list(decision_dict.keys())[1]
+        decision_operation2 = list(decision_dict.values())[1]
 
         if decision_operation1 == "add":
             k8s_automation_tool_instance.deploy_one_pod(decision_object1)
         elif decision_operation1 == "delete":
             k8s_automation_tool_instance.delete_one_pod(decision_object1)
-        else:
-            # something wrong
-            continue
+        elif decision_operation1 == "still":
+            print("Youtube deployment stay still")
+        else :
+            print("something wrong .... y")
+            exit()
 
         if decision_operation2 == "add":
             k8s_automation_tool_instance.deploy_one_pod(decision_object2)
         elif decision_operation2 == "delete":
             k8s_automation_tool_instance.delete_one_pod(decision_object2)
+        elif decision_operation2 == "still":
+            print("Netflix deployment stay still")
         else:
-            # something wrong
-            continue
-         # refresh the server's counter
+            print("something wrong .... n")
+            exit()
+        
+        # refresh the server's counter
         up.resetcounter_list(YOUTUBE_SERVER_IP, YOUTUBE_SERVER_PORT)
         up.resetcounter_list(NETFLIX_SERVER_IP, NETFLIX_SERVER_PORT)
 
         # serving time
         time.sleep(SERVERING_DURATION)
         # monitoring
-        control_center_instance.stream_monitor()
+        ratio_to_local = control_center_instance.stream_monitor()
+
+        # update the q_learning table by ENV_return_value -> ratio to local
+        q_learning_decision_center_instance.rl_by_step(ratio_to_local)
         # time.sleep(3)
 
     control_center_instance.result_graph()
+    print(q_learning_decision_center_instance.state_list)
 
 if __name__ == '__main__':
     # initial()
-    simultaion()
-    # stop_service()
+    # simultaion()
+    stop_service()
     # test2() 
     # time.sleep(100)
+    # q_learning_decision_center_instance = q_learning_decision_center()
+    # decision_dict = q_learning_decision_center_instance.action_generate()
+    # print(decision_dict)
+    # decision_object1 = list(decision_dict.keys())[0]
+    # decision_operation1 = list(decision_dict.values())[0]
+
+    # decision_object2 = list(decision_dict.keys())[1]
+    # decision_operation2 = list(decision_dict.values())[1]
+    # print(decision_object1)
+    # print(decision_operation1)
+    # print(decision_object2)
+    # print(decision_operation2)
 
 
 

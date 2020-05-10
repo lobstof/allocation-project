@@ -47,10 +47,10 @@ class q_learning_decision_center:
         # print(table)
         return table
 
-    def __init__(self):
+    def __init__(self,N_PODS_TOTAL=4,EPSILON=1,ALPHA=0.1,GAMMA=0.9,real_time_state=11):
         np.random.seed(2)  # reproducible
 
-        self.N_PODS_TOTAL = 4    # the total pods that we can deploy (the max volume amount)
+        self.N_PODS_TOTAL = N_PODS_TOTAL    # the total pods that we can deploy (the max volume amount)
         self.STATES = self.generate_state_cases(self.N_PODS_TOTAL)
         self.N_STATES = len(self.STATES)
         self.LARGE_NEGATIVE_NUMBER = -9999
@@ -70,11 +70,20 @@ class q_learning_decision_center:
         # n0 = remain unchanged
         self.ACTIONS = ['ya1_na1', 'ya1_nd1', 'ya1_n0', 'yd1_na1', 'yd1_nd1', 'yd1_n0', 'y0_na1', 'y0_nd1', 'y0_n0']
         self.N_ACTIONS = len(self.ACTIONS)
-        self.EPSILON = 1   # greedy police
-        self.ALPHA = 0.1     # learning rate
-        self.GAMMA = 0.9    # discount factor
+        self.EPSILON = EPSILON   # greedy police
+        self.ALPHA = ALPHA     # learning rate
+        self.GAMMA = GAMMA    # discount factor
         self.MAX_EPISODES = 1   # maximum episodes
         self.q_table = self.build_q_table(self.STATES, self.ACTIONS)
+
+        # for training record
+        self.step_counter = 0
+        self.real_time_state = real_time_state
+        self.real_time_score = 0 
+        self.action_next = ''
+        self.state_next = 0
+        self.score_list = []
+        self.state_list = []
         
 
     def action_interpreter(self,S,A,q_table):
@@ -164,7 +173,7 @@ class q_learning_decision_center:
             for i in range(150):
                 action_names = state_actions[state_actions == state_actions.max()].index
                 action_name = np.random.choice(action_names)
-                # verify that is this action is allowe
+                # verify that is this action is allowed
                 if(self.is_action_allowed(state, action_name, q_table)):
                     return action_name
                 else: 
@@ -228,9 +237,41 @@ class q_learning_decision_center:
             print(self.WEIGHT_YOUTUBE)
             print(self.WEIGHT_NETFLIX)
 
-if __name__ == "__main__":
-    q_learning_decision_center_instance = q_learning_decision_center()
-    q_learning_decision_center_instance.rl()
+    def rl_by_step(self,next_step_score):
+
+        # update score list
+        self.score_list.append(next_step_score)
+
+        print('state now: ' + str(self.real_time_state))
+        A = self.action_next
+        next_step_state = self.state_next
+        R = next_step_score - self.real_time_score
+
+        self.real_time_score = next_step_score
+        q_predict = self.q_table.loc[self.real_time_state, A]
+        # 
+        q_target = R + self.GAMMA * self.q_table.loc[next_step_state, :].max()
+        self.q_table.loc[self.real_time_state, A] += self.ALPHA * (q_target - q_predict)  # update
+
+        self.real_time_state = next_step_state  # move to next state
+        # update the state list
+        self.state_list.append(self.real_time_state)
+        self.step_counter += 1
+    
+    def action_generate(self):
+        A = self.choose_action(self.real_time_state, self.q_table)
+        self.action_next = A
+        
+        (action_dict,S_) = self.action_interpreter(self.real_time_state,self.action_next,self.q_table)
+        print("*********")
+        print("action generated:")
+        print(action_dict)
+        print("*********")
+        self.state_next = S_
+        return action_dict
+# if __name__ == "__main__":
+#     q_learning_decision_center_instance = q_learning_decision_center()
+#     q_learning_decision_center_instance.rl()
     # q_table = build_q_table(STATES, ACTIONS)
     # # print(int(0%10))
     # state = 3

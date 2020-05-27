@@ -248,11 +248,21 @@ def simultaion():
         print("state now : ")
         print(q_learning_decision_center_instance.real_time_state)
         decision_dict = q_learning_decision_center_instance.action_generate()
+        print("action taken:")
+        print(decision_dict)
+
         decision_object1 = list(decision_dict.keys())[0]
         decision_operation1 = list(decision_dict.values())[0]
 
         decision_object2 = list(decision_dict.keys())[1]
         decision_operation2 = list(decision_dict.values())[1]
+
+        # interval numero i
+        # print the actions taken 
+        
+        # wait the re-allcoation
+        # update the server's list 
+        # delete one pod
 
         if decision_operation1 == "add":
             k8s_automation_tool_instance.deploy_one_pod(decision_object1)
@@ -300,20 +310,15 @@ if __name__ == '__main__':
     # initial()
     # simultaion()
     stop_service()
-    # test2() 
-    # time.sleep(100)
-    # q_learning_decision_center_instance = q_learning_decision_center()
-    # decision_dict = q_learning_decision_center_instance.action_generate()
-    # print(decision_dict)
-    # decision_object1 = list(decision_dict.keys())[0]
-    # decision_operation1 = list(decision_dict.values())[0]
+  
 
-    # decision_object2 = list(decision_dict.keys())[1]
-    # decision_operation2 = list(decision_dict.values())[1]
-    # print(decision_object1)
-    # print(decision_operation1)
-    # print(decision_object2)
-    # print(decision_operation2)
-
-# todo:
-# make request waiting time to randome (distribution exponentiel) 
+    # 1. request generation fllow the poison distribution  done 
+    # 2. print the each action taken at the loop done 
+    # 3. its better to maintain the servers list before the/
+    # re-allcoation so that the server wont redirect the requst/
+    # to the cdn pods who are under deleting 
+    
+    # -- 3 -- #
+    # It should decide how long we must wait for the previous connections to be finished
+        # time.sleep(1)
+        # or we assume that all the connection will be finished once it get connected (if so, there is no more need to wait)

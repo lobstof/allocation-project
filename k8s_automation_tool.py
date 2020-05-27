@@ -141,6 +141,7 @@ class k8s_automation_tool:
             # update the pod list of the youtube_server
             self.youtube_list_add_pod(pod_name)
             time.sleep(1)
+            
             return True
 
         else:
@@ -186,6 +187,11 @@ class k8s_automation_tool:
                 # there is no more pod existed
                 # we can't delete cloud pod
                 return False
+            
+            # update the list before deleting it
+            self.youtube_list_delete_pod(pod_name)
+            # It should decide how long we must wait for the previous connections to be finished
+            time.sleep(1)
 
             pod_name = self.youtube_deployed_name_list.pop()
 
@@ -197,8 +203,7 @@ class k8s_automation_tool:
             self.volume_return(pod_name)
 
             # update youtube server list
-            self.youtube_list_delete_pod(pod_name)
-            time.sleep(1)
+            
             print("deplotment : " + pod_name + " deleted")
 
             return True

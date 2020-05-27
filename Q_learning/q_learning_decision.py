@@ -49,7 +49,7 @@ class q_learning_decision_center:
         # print(table)
         return table
 
-    def __init__(self,N_PODS_TOTAL=4,EPSILON=1,ALPHA=0.1,GAMMA=0.9,real_time_state=11):
+    def __init__(self,N_PODS_TOTAL=4,EPSILON=0.1,ALPHA=0.1,GAMMA=0.9,real_time_state=11):
         np.random.seed(2)  # reproducible
 
         self.N_PODS_TOTAL = N_PODS_TOTAL    # the total pods that we can deploy (the max volume amount)
@@ -161,7 +161,7 @@ class q_learning_decision_center:
         # This is how to choose an action
         state_actions = q_table.loc[state, :]
         # act non-greedy
-        if (np.random.uniform() > self.EPSILON):  
+        if (np.random.uniform() > 1 - self.EPSILON):  
             # to filtre the action unalllowed
             for i in range(150):
                 action_name = np.random.choice(self.ACTIONS)
@@ -285,9 +285,10 @@ class q_learning_decision_center:
         file.write(json_data)
         file.close()
 
-# if __name__ == "__main__":
-#     q_learning_decision_center_instance = q_learning_decision_center()
-#     print(q_learning_decision_center_instance.q_table)
+if __name__ == "__main__":
+    q_learning_decision_center_instance = q_learning_decision_center()
+    # print(q_learning_decision_center_instance.q_table)
+    q_learning_decision_center_instance.rl()
 
     # list_s = [-12,15,77,-22,-44,55,11,42,-12,-22]
     # for i in range(10):

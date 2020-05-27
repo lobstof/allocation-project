@@ -10,14 +10,21 @@ import shlex
 import random 
 from threading import Thread 
 from random import randint
+from scipy.stats import poisson
 
 # content number must be multiple of 10
 TOTAL_CONTENT_NUMBER = 60
 # the duration of the video
-SERVICE_DURATION = 3
+SERVICE_DURATION = 60
+
+# average number of events per interval for youtube
+P_POISSON_YOUTUBE = 4
+
+# average number of events per interval for netflix
+P_POISSON_NETFLIX = 2
 
 # each 1 second, the script will generate a new request to servers
-WAIT_DURATION = 1
+REQUEST_INTERVAL = 1
 
 YOUTUBE_SERVICE_PORT = "9999"
 NETFLIX_SERVICE_PORT = "8888"
@@ -73,13 +80,11 @@ def simulation_netflix(hostip, service_port, ID,generator_zipf):
     print("ID = " + ID + "end: " + str(number) + "--netflix")
     browser.close()
 
-def request_simulation(youtube_ip,netflix_ip,ID,generator_zipf):
-    # 70 percent to request youtube, 30 percent to request netflix
-    i = random.randint(1,10)
-    if i <= 7 :
-        simulation_youtube(youtube_ip,YOUTUBE_SERVICE_PORT,ID,generator_zipf)
-    else:
-        simulation_netflix(netflix_ip,NETFLIX_SERVICE_PORT,ID,generator_zipf)
+def request_simulation_youtube(youtube_ip,ID,generator_zipf):
+    simulation_youtube(youtube_ip,YOUTUBE_SERVICE_PORT,ID,generator_zipf)
+
+def request_simulation_netflix(netflix_ip,ID,generator_zipf):
+    simulation_netflix(netflix_ip,NETFLIX_SERVICE_PORT,ID,generator_zipf)
 
 def request_graph(zipf_list, N):
     left = list(range((int(N/10))))
@@ -107,7 +112,6 @@ if __name__ == "__main__":
     netflix_ip = sys.argv[2]
     ID = sys.argv[3]
 
-
     # demand fun_zipf generator 
     generator_zipf = fun_zipf.ZipfGenerator(ZIPF_S,TOTAL_CONTENT_NUMBER)
     
@@ -120,16 +124,21 @@ if __name__ == "__main__":
     sys.stdout = log_file
     start_time = time.time()
 
-    # start requesting 
+    # start requesting
     print("ID = "+ str(sys.argv[1]) + "start time = %s seconds ---" % (start_time))
     while(True):
+
+        # To Youtube
         # threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
-        thread = Thread(target=request_simulation, args=(youtube_ip,netflix_ip,ID,generator_zipf))
-        thread.start()
-        
-        # https://www.themathcitadel.com/poisson-processes-and-data-loss/
-        # todo, make WAIT_DURATION a random value 
-        time.sleep(WAIT_DURATION)
+        for i in range(poisson.rvs(P_POISSON_YOUTUBE, size=1)[0]):
+            Thread(target=request_simulation_youtube, args=(youtube_ip,ID,generator_zipf)).start()
+
+        # To Netflix 
+        # threading._start_new_thread(os.system, ("python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
+        for i in range(poisson.rvs(P_POISSON_NETFLIX, size=1)[0]):
+            Thread(target=request_simulation_netflix, args=(netflix_ip,ID,generator_zipf)).start()
+
+        time.sleep(REQUEST_INTERVAL)
 
         # check the existence of main simulation processe
         output = subprocess.check_output("ps ax | grep CDN_deployment.py", shell=True)
@@ -137,14 +146,15 @@ if __name__ == "__main__":
         output_args = shlex.split(output)
         count = output_args.count("CDN_deployment.py")
         if(count > 2):
-            # the main process has finished, so this process will be ended too
+            # the main process has finished, so this process will be ended
             continue
         else:
             break
+        
 
     # output the finish info
     print("ID = "+ str(sys.argv[1]) + "--- %s seconds ---" % (time.time() - start_time))
     # close the log file
     log_file.close()
 
-# duration estimation : (SERVICE_TIME + SERVICE_TIME + WAIT_DURATION + 15s) *  REQUEST_TIME
+# duration estimation : (SERVICE_TIME + SERVICE_TIME + REQUEST_INTERVAL + 15s) *  REQUEST_TIME

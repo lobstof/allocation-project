@@ -1,7 +1,7 @@
 import kubernetes_tools as tools
 from kubernetes import client, config, watch
 import time
-import update_list as up
+import control_center.update_list as up
 
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"

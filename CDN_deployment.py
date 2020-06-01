@@ -1,15 +1,15 @@
-import kubernetes_tools as tools
+import k8s_tools.kubernetes_tools as tools
 import time
-import update_list as up
+import control_center.update_list as up
 import json
 from kubernetes import client, config, watch
 # from pick import pick
 import os
 import threading
-from control_center import control_center
-from k8s_automation_tool import k8s_automation_tool
-from decision_center import decision_center
-from Q_learning.q_learning_decision import q_learning_decision_center
+from control_center.control_center import control_center
+from k8s_tools.k8s_automation_tool import k8s_automation_tool
+from control_center.decision_center import decision_center
+from control_center.q_learning_decision import q_learning_decision_center
 
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"

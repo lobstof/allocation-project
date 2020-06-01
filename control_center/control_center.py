@@ -6,7 +6,7 @@ import time
 import random
 
 import kubernetes
-import kubernetes_tools
+import k8s_tools.kubernetes_tools
 
 
 

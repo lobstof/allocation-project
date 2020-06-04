@@ -49,7 +49,7 @@ class q_learning_decision_center:
         # print(table)
         return table
 
-    def __init__(self,N_PODS_TOTAL=4,EPSILON=0.1,ALPHA=0.1,GAMMA=0.9,real_time_state=11):
+    def __init__(self,N_PODS_TOTAL=4,EPSILON=0.2,ALPHA=0.8,GAMMA=0.4,real_time_state=11):
         np.random.seed(2)  # reproducible
 
         self.N_PODS_TOTAL = N_PODS_TOTAL    # the total pods that we can deploy (the max volume amount)

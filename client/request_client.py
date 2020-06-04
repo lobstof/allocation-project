@@ -24,12 +24,12 @@ P_POISSON_YOUTUBE = 4
 P_POISSON_NETFLIX = 2
 
 # each 1 second, the script will generate a new request to servers
-REQUEST_INTERVAL = 1
+REQUEST_INTERVALE = 1
 
 YOUTUBE_SERVICE_PORT = "9999"
 NETFLIX_SERVICE_PORT = "8888"
 
-ZIPF_S = 0.4
+ZIPF_S = 1.2
 
 import numpy as np
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         for i in range(poisson.rvs(P_POISSON_NETFLIX, size=1)[0]):
             Thread(target=request_simulation_netflix, args=(netflix_ip,ID,generator_zipf)).start()
 
-        time.sleep(REQUEST_INTERVAL)
+        time.sleep(REQUEST_INTERVALE)
 
         # check the existence of main simulation processe
         output = subprocess.check_output("ps ax | grep CDN_deployment.py", shell=True)
@@ -157,4 +157,4 @@ if __name__ == "__main__":
     # close the log file
     log_file.close()
 
-# duration estimation : (SERVICE_TIME + SERVICE_TIME + REQUEST_INTERVAL + 15s) *  REQUEST_TIME
+# duration estimation : (SERVICE_TIME + SERVICE_TIME + REQUEST_INTERVALE + 15s) *  REQUEST_TIME

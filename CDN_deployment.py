@@ -1,15 +1,14 @@
 import k8s_tools.kubernetes_tools as tools
 import time
-import control_center.update_list as up
+import center_management.update_list as up
 import json
 from kubernetes import client, config, watch
 # from pick import pick
 import os
 import threading
-from control_center.control_center import control_center
+from center_management.data_center import data_center
 from k8s_tools.k8s_automation_tool import k8s_automation_tool
-from control_center.decision_center import decision_center
-from control_center.q_learning_decision import q_learning_decision_center
+from center_management.q_learning_decision import q_learning_decision_center
 
 PORT_RESERVED = 8000
 PORT_RESERVED_STRING = "8000"
@@ -20,7 +19,7 @@ YOUTUBE_SERVER_PORT = "3000"
 NETFLIX_SERVER_IP = "172.17.0.7"
 NETFLIX_SERVER_PORT = "2000"
 
-FILEPATH = "record.json"
+FILEPATH_STATE_TEMP = "log/state_record_temp.json"
 
 
 #load k8s config
@@ -107,23 +106,23 @@ def service_config():
 
 def initial():
     
-    #prepare youtube and netflix server
+    #prepare youtube and netflix redirection server
 
-    # youtube control server, netflix control server
+    # youtube redirection server, netflix redirection server. Objects creation 
     deployment_youtube_server = tools.youTube_control_deployment_object_create(PORT_RESERVED)    
     deployment_netflix_server = tools.netflix_control_deployment_object_create(PORT_RESERVED)
 
-    # deploy two servers
+    # deploy the created objects
     tools.create_deployment(api_minikube,deployment_youtube_server)
     tools.create_deployment(api_minikube,deployment_netflix_server)    
     time.sleep(8)
 
-    # youtube server list initial
+    # youtube redirection server list initial
     youtube_list_initial(core_v1_api,"youtube-control")
     print("YOUTUBE_SERVER_IP = " + YOUTUBE_SERVER_IP)
     time.sleep(4)
 
-    # netflix server list initial
+    # netflix redirection server list initial
     netflix_list_initial(core_v1_api,"netflix-control")
     print("NETFLIX_SERVER_IP = " + NETFLIX_SERVER_IP)
     time.sleep(4)
@@ -214,7 +213,7 @@ def simultaion():
     print("initialization finished")
 
     # demande an instance of controle_center
-    control_center_instance = control_center("record.json","state_youtube",
+    data_center_instance = data_center(FILEPATH_STATE_TEMP,"state_youtube",
                                             "state_netflix",YOUTUBE_SERVER_IP,
                                             YOUTUBE_SERVER_PORT,NETFLIX_SERVER_IP,
                                             NETFLIX_SERVER_PORT)
@@ -225,7 +224,7 @@ def simultaion():
     time.sleep(25)
 
     # monitoring 
-    control_center_instance.stream_monitor()
+    data_center_instance.stream_monitor()
     # time.sleep(3)
 
     # re-allocation loop
@@ -291,13 +290,13 @@ def simultaion():
         # serving time
         time.sleep(MONITORING_DURATION)
         # monitoring
-        ratio_to_local = control_center_instance.stream_monitor()
+        ratio_to_local = data_center_instance.stream_monitor()
 
         # update the q_learning table by ENV_return_value -> ratio to local
         q_learning_decision_center_instance.rl_by_step(ratio_to_local)
         # time.sleep(3)
 
-    control_center_instance.result_graph()
+    data_center_instance.result_graph()
     print(q_learning_decision_center_instance.state_list)
 
     # recoding data
@@ -308,8 +307,8 @@ def simultaion():
 
 if __name__ == '__main__':
     # initial()
-    # simultaion()
-    stop_service()
+    simultaion()
+    # stop_service()
   
 
     # 1. request generation fllow the poison distribution  done 

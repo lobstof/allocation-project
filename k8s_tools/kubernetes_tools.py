@@ -90,7 +90,7 @@ def youTube_control_deployment_object_create(port_allocated):
     # define container
     container = client.V1Container(
         name="youtube-control",
-        image="youtube-server",
+        image="youtube-redirector",
         image_pull_policy="Never",
         ports=[client.V1ContainerPort(container_port=port_allocated)])
 
@@ -160,7 +160,7 @@ def netflix_control_deployment_object_create(port_allocated):
     container = client.V1Container(
         name="netflix-control",
         # we take the same image for netflix server
-        image="netflix-server",
+        image="netflix-redirector",
         image_pull_policy="Never",
         ports=[client.V1ContainerPort(container_port=port_allocated)])
 

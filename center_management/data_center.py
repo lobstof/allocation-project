@@ -5,20 +5,15 @@ import asyncio
 import time
 import random
 
-import kubernetes
-import k8s_tools.kubernetes_tools
 
-
-
-
-class control_center:
+class data_center:
 
     def __init__(self,json_record_file,name_state_youtube,name_state_netflix,youtube_hostip,youtube_service_port,netflix_hostip,netflix_service_port):
         self.json_record_file = json_record_file
         self.name_state_youtube = name_state_youtube
         self.name_state_netflix = name_state_netflix
 
-        self.ratio_list = []
+        self.ratio_list = [[0,0,0]]
         self.n_data_set = 0
 
         self.best_ratio_total = 100
@@ -30,7 +25,8 @@ class control_center:
         self.netflix_service_port = netflix_service_port
 
     # ratio_to_cloud_list[0] = ratio_youtube, ratio_to_cloud_list[1] = ratio_netflix, ratio_to_cloud_list[2] = ratio_total
-    def get_ratio_to_local(self):
+    
+    def get_local_request_ratio(self):
 
         ratio_to_cloud_list = []
         with open(self.json_record_file) as json_file:
@@ -70,14 +66,6 @@ class control_center:
             self.n_data_set = self.n_data_set + 1
 
             # update the best_ratio_total
-            # if  ratio_to_cloud_total < self.best_ratio_total :
-            #     self.best_ratio_total = ratio_to_cloud_total
-            #     return True
-            # else:
-            #     return False
-
-
-            # update the best_ratio_total
             if  ratio_to_cloud_total < self.best_ratio_total :
                 self.best_ratio_total = ratio_to_cloud_total
             
@@ -86,59 +74,80 @@ class control_center:
         
     def result_graph(self):
 
-        # number of data set
-        n_data_set = self.n_data_set
         ratio_list = self.ratio_list
-
-        # abscissa
-        left = []
-        tick_label = []
-
-        # number of data set equals to n
-        for j in range(n_data_set):
-            temp1 = 1 + 4*j
-            temp1_tick_label = "r_y" 
-            
-            temp2 = 2 + 4*j
-            temp2_tick_label = "r_n"
-            
-            temp3 = 3 + 4*j
-            temp3_tick_label = "r_total"
-
-            left.append(temp1)
-            left.append(temp2)
-            left.append(temp3)
-
-            tick_label.append(temp1_tick_label)
-            tick_label.append(temp2_tick_label)
-            tick_label.append(temp3_tick_label)
+        # ratio_list[0] is intial value
+        # ratio_list[i][youtube,netflix,total]    
         
-        # ordinate
-        height = []
-        for i in range(n_data_set):
-            height = height + ratio_list[i]
-    
-        plt.bar(left, height, tick_label = tick_label,
-                width=0.4)
-        plt.title('ratio_request' + '   the lowest ratio = ' + str(self.best_ratio_total))
-        # plt.show()
-        # attach a random number to result's name (as a tag)
-        ran_tag = str(random.randint(1,999))
-        plt.savefig('./log/ratio_request{}.png'.format(ran_tag))
+        # print out Total request ratio to Cloud
+        # select out the total flow ratio to Cloud
+        total_ratio = []
+        ratio_list.append([1,2,3])
+        ratio_list.append([4,5,6])
 
-        # todo convert the result data and operation records into JSON formal
+        for i in range(len(ratio_list)):
+            if i == 0:
+                continue
+            total_ratio.append(ratio_list[i][2])
+
+        x_total = range(1,len(total_ratio)+1)
+        y_total = total_ratio
+        plt.plot(x_total,y_total)
+        plt.title('Total Request Ratio To Cloud')
+        plt.savefig('./log/request_ratio_total.png')
+        plt.close()
+
+        # print out Youtube request ratio to Cloud
+        # select out the youtube flow ratio to Cloud
+        youtube_ratio = []
+        for i in range(len(ratio_list)):
+            if i == 0:
+                continue
+            youtube_ratio.append(ratio_list[i][0])
+
+        x_youtube = range(1,len(youtube_ratio)+1)
+        y_youtube = youtube_ratio
+        plt.plot(x_youtube,y_youtube)
+        plt.title('YouTube Request Ratio To Cloud')
+        plt.savefig('./log/request_ratio_youtube.png')
+        plt.close()
+
+        # print out Netflix request ratio to Cloud
+
+        # select out the netflix flow ratio to Cloud
+        netflix_ratio = []
+        for i in range(len(ratio_list)):
+            if i == 0:
+                continue
+            netflix_ratio.append(ratio_list[i][1])
+
+        x_netflix = range(1,len(netflix_ratio)+1)
+        y_netflix = netflix_ratio
+        plt.plot(x_netflix,y_netflix)
+        plt.title('Netflix Request Ratio To Cloud')
+        plt.savefig('./log/request_ratio_netflix.png')
+        plt.close()
+
+        # request ratio all
+        plt.plot(x_total,y_total)
+        plt.plot(x_youtube,y_youtube)
+        plt.plot(x_netflix,y_netflix)
+        plt.title('Request Ratio To Cloud')
+        plt.savefig('./log/request_ratio_all.png')
+        plt.close()
+
+        # convert the result data and operation records into JSON formal
         # and then transfer them to the file
-        data_list = self.ratio_list
-        file = open('ratio_list_record.json', 'w')
-        for i in data_list:
-            json_i = json.dumps(i)
-            file.write(json_i+'\n')
+        # data_list = self.ratio_list
+        data_list = ratio_list
+
+        file = open('./log/ratio_list_record.json', 'w')
+        # for i in data_list:
+        #     json_i = json.dumps(i)
+        #     file.write(json_i+'\n')
+        json_list = json.dumps(data_list)
+        file.write(json_list)
         file.close()
        
-        
-        
-
-    
     def stream_monitor(self):
 
         # youtube
@@ -162,27 +171,11 @@ class control_center:
         # print(data_with_title)
 
         # record ratio value to list
-        ratio_to_local = self.get_ratio_to_local()
+        ratio_to_local = self.get_local_request_ratio()
         return ratio_to_local
 
 
-# todo refresh the lists of netflix server and youtube server 
 
 
-
-
-
-# control_center_instance = control_center("record_json_data_test.json","state_youtube","state_netflix","localhost","3000","localhost","2000")
-
-# we will get a result value which indicates if this allocation is better or not 
-# print(control_center_instance.stream_monitor())
-
-# 
-# control_center_instance.get_ratio_to_local()
-# control_center_instance.get_ratio_to_local()
-
-
-
-# control_center_instance.result_graph()
-
-
+# data_center_instance = data_center("123","123","123","123","123","123","123")
+# data_center_instance.result_graph()

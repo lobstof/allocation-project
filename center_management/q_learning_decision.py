@@ -75,7 +75,7 @@ class q_learning_decision_center:
         self.EPSILON = EPSILON   # greedy police
         self.ALPHA = ALPHA     # learning rate
         self.GAMMA = GAMMA    # discount factor
-        self.MAX_EPISODES = 1   # maximum episodes
+        self.MAX_EPISODES = 10   # maximum episodes
         self.q_table = self.build_q_table(self.STATES, self.ACTIONS)
 
         # for training record
@@ -239,7 +239,12 @@ class q_learning_decision_center:
             print(self.WEIGHT_YOUTUBE)
             print(self.WEIGHT_NETFLIX)
 
-    def rl_by_step(self,next_step_score):
+    def rl_by_step(self,next_step_score,loop_time):
+
+        # we will set this instance the "stable mode" after 18 times training 
+        # -> EPSILON = 0.05
+        if int(loop_time) > 15:
+            self.EPSILON = 0.05 
 
         # update score list
         self.score_list.append(next_step_score)

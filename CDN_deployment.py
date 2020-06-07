@@ -107,7 +107,7 @@ def service_config():
 def initial():
     
     #prepare youtube and netflix redirection server
-
+    print(1)
     # youtube redirection server, netflix redirection server. Objects creation 
     deployment_youtube_server = tools.youTube_control_deployment_object_create(PORT_RESERVED)    
     deployment_netflix_server = tools.netflix_control_deployment_object_create(PORT_RESERVED)
@@ -116,6 +116,7 @@ def initial():
     tools.create_deployment(api_minikube,deployment_youtube_server)
     tools.create_deployment(api_minikube,deployment_netflix_server)    
     time.sleep(8)
+    print(2)
 
     # youtube redirection server list initial
     youtube_list_initial(core_v1_api,"youtube-control")
@@ -166,8 +167,8 @@ def initial():
 
     # deploy inital cdn pods 
     # we are going to deploy one youtube-container(youtube-1) and one netflix-container(netflix-1)
-    k8s_automation_tool_instance.deploy_one_pod("youtube")
-    k8s_automation_tool_instance.deploy_one_pod("netflix")
+    k8s_automation_tool_instance.deploy_one_pod("youtube",0,"initial","add 1 youtube")
+    k8s_automation_tool_instance.deploy_one_pod("netflix",10,"initial","add one 1 netflix")
 
     return k8s_automation_tool_instance
 
@@ -221,7 +222,7 @@ def simultaion():
 
     # pass the youtube, netflix server IP address and ID of client  
     threading._start_new_thread(os.system, ("python ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
-    time.sleep(25)
+    time.sleep(150)
 
     # monitoring 
     data_center_instance.stream_monitor()
@@ -240,15 +241,18 @@ def simultaion():
     # initial deployment is 1 youtube pod, 1 netflix pod
     q_learning_decision_center_instance = q_learning_decision_center(real_time_state=11)
 
-    N_time = 20
-    MONITORING_DURATION = 50
-    for i in range (N_time):
+    N_time = 30
+    MONITORING_DURATION = 150
+    for loop_time in range (N_time):
         # decision_dict = decision_center_instance.decision_generate()
-        print("state now : ")
+        print("state now (k8s automation): ")
+        print(str(len(k8s_automation_tool_instance.youtube_deployed_name_list)) 
+              + str(len(k8s_automation_tool_instance.netflix_deployed_name_list)))
         print(q_learning_decision_center_instance.real_time_state)
         decision_dict = q_learning_decision_center_instance.action_generate()
-        print("action taken:")
-        print(decision_dict)
+
+        # state check k8s_automation.state and q_learning_decision.state
+        k8s_automation_tool_instance.state_check(q_learning_decision_center_instance.real_time_state)
 
         decision_object1 = list(decision_dict.keys())[0]
         decision_operation1 = list(decision_dict.values())[0]
@@ -264,9 +268,9 @@ def simultaion():
         # delete one pod
 
         if decision_operation1 == "add":
-            k8s_automation_tool_instance.deploy_one_pod(decision_object1)
+            k8s_automation_tool_instance.deploy_one_pod(decision_object1,q_learning_decision_center_instance.real_time_state,loop_time,decision_dict)
         elif decision_operation1 == "delete":
-            k8s_automation_tool_instance.delete_one_pod(decision_object1)
+            k8s_automation_tool_instance.delete_one_pod(decision_object1,q_learning_decision_center_instance.real_time_state,loop_time,decision_dict)
         elif decision_operation1 == "still":
             print("Youtube deployment stay still")
         else :
@@ -274,9 +278,9 @@ def simultaion():
             exit()
 
         if decision_operation2 == "add":
-            k8s_automation_tool_instance.deploy_one_pod(decision_object2)
+            k8s_automation_tool_instance.deploy_one_pod(decision_object2,q_learning_decision_center_instance.real_time_state,loop_time,decision_dict)
         elif decision_operation2 == "delete":
-            k8s_automation_tool_instance.delete_one_pod(decision_object2)
+            k8s_automation_tool_instance.delete_one_pod(decision_object2,q_learning_decision_center_instance.real_time_state,loop_time,decision_dict)
         elif decision_operation2 == "still":
             print("Netflix deployment stay still")
         else:
@@ -291,9 +295,10 @@ def simultaion():
         time.sleep(MONITORING_DURATION)
         # monitoring
         ratio_to_local = data_center_instance.stream_monitor()
+        print("ratio_to_local = " + str(ratio_to_local))
 
         # update the q_learning table by ENV_return_value -> ratio to local
-        q_learning_decision_center_instance.rl_by_step(ratio_to_local)
+        q_learning_decision_center_instance.rl_by_step(ratio_to_local,loop_time)
         # time.sleep(3)
 
     data_center_instance.result_graph()
@@ -301,8 +306,7 @@ def simultaion():
 
     # recoding data
     q_learning_decision_center_instance.data_record()
-    q_learning_decision_center_instance.q_table.to_csv("q_table", sep='\t')
-    q_learning_decision_center_instance.q_table.to_csv("q_table2")
+    q_learning_decision_center_instance.q_table.to_csv("q_table.csv", sep='\t')
 
 
 if __name__ == '__main__':

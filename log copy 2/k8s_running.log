@@ -1,0 +1,145 @@
+
+This is the initialloop:
+Actions taken add 1 youtube
+Input decision center status : 0
+k8s center status:00
+This is the initialloop:
+Actions taken add one 1 netflix
+Input decision center status : 10
+k8s center status:10
+This is the 0loop:
+Actions taken {'youtube': 'delete', 'netflix': 'still'}
+Input decision center status : 11
+k8s center status:11
+This is the 1loop:
+Actions taken {'youtube': 'add', 'netflix': 'still'}
+Input decision center status : 1
+k8s center status:01
+This is the 2loop:
+Actions taken {'youtube': 'delete', 'netflix': 'still'}
+Input decision center status : 11
+k8s center status:11
+This is the 3loop:
+Actions taken {'youtube': 'add', 'netflix': 'still'}
+Input decision center status : 1
+k8s center status:01
+This is the 4loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 11
+k8s center status:11
+This is the 4loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 11
+k8s center status:01
+This is the 5loop:
+Actions taken {'youtube': 'still', 'netflix': 'delete'}
+Input decision center status : 2
+k8s center status:02
+This is the 6loop:
+Actions taken {'youtube': 'add', 'netflix': 'still'}
+Input decision center status : 1
+k8s center status:01
+This is the 7loop:
+Actions taken {'youtube': 'still', 'netflix': 'add'}
+Input decision center status : 11
+k8s center status:11
+This is the 8loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 12
+k8s center status:12
+This is the 8loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 12
+k8s center status:02
+This is the 9loop:
+Actions taken {'youtube': 'add', 'netflix': 'still'}
+Input decision center status : 3
+k8s center status:03
+This is the 10loop:
+Actions taken {'youtube': 'still', 'netflix': 'delete'}
+Input decision center status : 13
+k8s center status:13
+This is the 11loop:
+Actions taken {'youtube': 'add', 'netflix': 'delete'}
+Input decision center status : 12
+k8s center status:12
+This is the 11loop:
+Actions taken {'youtube': 'add', 'netflix': 'delete'}
+Input decision center status : 12
+k8s center status:22
+This is the 12loop:
+Actions taken {'youtube': 'still', 'netflix': 'delete'}
+Input decision center status : 21
+k8s center status:21
+This is the 13loop:
+Actions taken {'youtube': 'add', 'netflix': 'add'}
+Input decision center status : 20
+k8s center status:20
+This is the 13loop:
+Actions taken {'youtube': 'add', 'netflix': 'add'}
+Input decision center status : 20
+k8s center status:30
+This is the 14loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 31
+k8s center status:31
+This is the 14loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 31
+k8s center status:21
+This is the 15loop:
+Actions taken {'youtube': 'still', 'netflix': 'delete'}
+Input decision center status : 22
+k8s center status:22
+This is the 16loop:
+Actions taken {'youtube': 'add', 'netflix': 'still'}
+Input decision center status : 21
+k8s center status:21
+This is the 17loop:
+Actions taken {'youtube': 'add', 'netflix': 'delete'}
+Input decision center status : 31
+k8s center status:31
+This is the 17loop:
+Actions taken {'youtube': 'add', 'netflix': 'delete'}
+Input decision center status : 31
+k8s center status:41
+This is the 18loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 40
+k8s center status:40
+This is the 18loop:
+Actions taken {'youtube': 'delete', 'netflix': 'add'}
+Input decision center status : 40
+k8s center status:30
+This is the 19loop:
+Actions taken {'youtube': 'delete', 'netflix': 'delete'}
+Input decision center status : 31
+k8s center status:31
+This is the 19loop:
+Actions taken {'youtube': 'delete', 'netflix': 'delete'}
+Input decision center status : 31
+k8s center status:21
+This is the 20loop:
+Actions taken {'youtube': 'add', 'netflix': 'add'}
+Input decision center status : 20
+k8s center status:20
+This is the 20loop:
+Actions taken {'youtube': 'add', 'netflix': 'add'}
+Input decision center status : 20
+k8s center status:30
+This is the 21loop:
+Actions taken {'youtube': 'delete', 'netflix': 'still'}
+Input decision center status : 31
+k8s center status:31
+This is the 22loop:
+Actions taken {'youtube': 'add', 'netflix': 'still'}
+Input decision center status : 21
+k8s center status:21
+This is the 23loop:
+Actions taken {'youtube': 'still', 'netflix': 'delete'}
+Input decision center status : 31
+k8s center status:31
+This is the 24loop:
+Actions taken {'youtube': 'add', 'netflix': 'still'}
+Input decision center status : 30
+k8s center status:30

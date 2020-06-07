@@ -1,6 +1,6 @@
 import json
 import matplotlib.pyplot as plt
-import update_list as up
+import center_management.update_list as up
 import asyncio
 import time
 import random
@@ -81,9 +81,6 @@ class data_center:
         # print out Total request ratio to Cloud
         # select out the total flow ratio to Cloud
         total_ratio = []
-        ratio_list.append([1,2,3])
-        ratio_list.append([4,5,6])
-
         for i in range(len(ratio_list)):
             if i == 0:
                 continue

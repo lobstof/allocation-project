@@ -1,10 +1,10 @@
 # preapre docker images
 
 netflix_server_build:
-	docker build -t netflix-server ./JSON_server_netflix_image
+	docker build -t netflix-server:1.0 ./JSON_server_netflix_image
 
 youtube_server_build:
-	docker build -t youtube-server ./JSON_server_youtube_image
+	docker build -t youtube-server:1.0 ./JSON_server_youtube_image
 
 netflix_cdn_download:
 	sh ./cdn_images/download_cdn_netflix_image.sh

@@ -241,7 +241,7 @@ def simultaion():
     # initial deployment is 1 youtube pod, 1 netflix pod
     q_learning_decision_center_instance = q_learning_decision_center(real_time_state=11)
 
-    N_time = 30
+    N_time = 50
     MONITORING_DURATION = 150
     for loop_time in range (N_time):
         # decision_dict = decision_center_instance.decision_generate()

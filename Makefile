@@ -2,12 +2,12 @@
 
 netflix_server_build:
 	cd ./JSON_server_netflix_image
-	docker -t netflix-server .
+	docker build -t netflix-server .
 	cd ..
 
 youtube_server_build:
 	cd ./JSON_server_youtube_image
-	docker -t youtube-server .
+	docker build -t youtube-server .
 	cd ..
 
 netflix_cdn_download:

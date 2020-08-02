@@ -6,6 +6,7 @@ from kubernetes import client, config, watch
 # from pick import pick
 import os
 import threading
+import sys
 from center_management.data_center import data_center
 from k8s_tools.k8s_automation_tool import k8s_automation_tool
 from center_management.q_learning_decision import q_learning_decision_center
@@ -27,7 +28,7 @@ config.load_kube_config()
 #get api instance
 api_minikube = client.AppsV1Api()
 core_v1_api = client.CoreV1Api()
-
+YOUTUBE_SERVER_IP
 def youtube_list_add_pod(core_v1_api,deployment_name):
 
     # youtube server
@@ -310,7 +311,12 @@ def simultaion():
 
 
 if __name__ == '__main__':
-    # initial()
-    simultaion()
-    # stop_service()
-  
+   
+    if sys.argv[1] == "initial":
+        initial()
+    elif sys.argv[1] == "simulation":
+        simultaion()
+    elif sys.argv[1] == "stop_service":
+        stop_service()
+    else:
+        print("command unknown")

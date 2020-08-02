@@ -1,29 +1,19 @@
 # preapre docker images
 
 netflix_server_build:
-	cd ./JSON_server_netflix_image
-	docker build -t netflix-server .
-	cd ..
+	docker build -t netflix-server ./JSON_server_netflix_image
 
 youtube_server_build:
-	cd ./JSON_server_youtube_image
-	docker build -t youtube-server .
-	cd ..
+	docker build -t youtube-server ./JSON_server_youtube_image
 
 netflix_cdn_download:
-	cd ./cdn_images
-	sh download_cdn_netflix_image.sh
-	cd ..
+	sh ./cdn_images/download_cdn_netflix_image.sh
 
 youtube_cdn_download:
-	cd ./cdn_images
-	sh download_cdn_youtube_image.sh
-	cd ..
+	sh ./cdn_images/download_cdn_youtube_image.sh
 
 cdn_images_build:
-	cd ./cdn_images
-	docker load --input cdnyoutube.tar
-	docker load --input cdnnetflix.tar
-	cd ..
+	docker load --input ./cdn_images/cdnyoutube.tar
+	docker load --input ./cdn_images/cdnnetflix.tar
 
 docker_image_prepare: netflix_server_build youtube_server_build netflix_cdn_download youtube_cdn_download cdn_images_build

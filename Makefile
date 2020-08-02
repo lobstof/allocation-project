@@ -13,7 +13,7 @@ youtube_cdn_download:
 	sh ./cdn_images/download_cdn_youtube_image.sh
 
 cdn_images_build:
-	docker load --input ./cdn_images/cdnyoutube.tar
-	docker load --input ./cdn_images/cdnnetflix.tar
+	docker load --input ./cdnyoutube.tar
+	docker load --input ./cdnnetflix.tar
 
 docker_image_prepare: netflix_server_build youtube_server_build netflix_cdn_download youtube_cdn_download cdn_images_build

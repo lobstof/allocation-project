@@ -309,6 +309,23 @@ def simultaion():
     q_learning_decision_center_instance.data_record()
     q_learning_decision_center_instance.q_table.to_csv("q_table.csv", sep='\t')
 
+def test():
+    list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
+                        "volume-claim-4","volume-claim-5","volume-claim-6",
+                        "volume-claim-7","volume-claim-8","volume-claim-9",
+                        "volume-claim-10",]
+
+    # volume pool preapre 
+    k8s_automation_tool_instance = k8s_automation_tool(core_v1_api,api_minikube,
+                                        list_volume_name,YOUTUBE_SERVER_IP,
+                                        YOUTUBE_SERVER_PORT,NETFLIX_SERVER_IP,
+                                        NETFLIX_SERVER_PORT)
+
+    deployment_name_youtube_cloud = "youtube-cloud"
+    deployment_youtube_cloud = tools.youTube_deployment_object_create(PORT_RESERVED,
+                                                                k8s_automation_tool_instance.volume_request(deployment_name_youtube_cloud),
+                                                                deployment_name_youtube_cloud)
+    tools.create_deployment(api_minikube,deployment_youtube_cloud)
 
 if __name__ == '__main__':
    
@@ -318,5 +335,7 @@ if __name__ == '__main__':
         simultaion()
     elif sys.argv[1] == "stop_service":
         stop_service()
+    elif sys.argv[1] == "test":
+        test()
     else:
         print("command unknown")

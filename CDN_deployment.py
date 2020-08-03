@@ -310,22 +310,42 @@ def simultaion():
     q_learning_decision_center_instance.q_table.to_csv("q_table.csv", sep='\t')
 
 def test():
-    list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
-                        "volume-claim-4","volume-claim-5","volume-claim-6",
-                        "volume-claim-7","volume-claim-8","volume-claim-9",
-                        "volume-claim-10",]
+    # list_volume_name = ["volume-claim-1","volume-claim-2","volume-claim-3",
+    #                     "volume-claim-4","volume-claim-5","volume-claim-6",
+    #                     "volume-claim-7","volume-claim-8","volume-claim-9",
+    #                     "volume-claim-10",]
 
-    # volume pool preapre 
-    k8s_automation_tool_instance = k8s_automation_tool(core_v1_api,api_minikube,
-                                        list_volume_name,YOUTUBE_SERVER_IP,
-                                        YOUTUBE_SERVER_PORT,NETFLIX_SERVER_IP,
-                                        NETFLIX_SERVER_PORT)
+    # # volume pool preapre 
+    # k8s_automation_tool_instance = k8s_automation_tool(core_v1_api,api_minikube,
+    #                                     list_volume_name,YOUTUBE_SERVER_IP,
+    #                                     YOUTUBE_SERVER_PORT,NETFLIX_SERVER_IP,
+    #                                     NETFLIX_SERVER_PORT)
 
-    deployment_name_youtube_cloud = "youtube-cloud"
-    deployment_youtube_cloud = tools.youTube_deployment_object_create(PORT_RESERVED,
-                                                                k8s_automation_tool_instance.volume_request(deployment_name_youtube_cloud),
-                                                                deployment_name_youtube_cloud)
-    tools.create_deployment(api_minikube,deployment_youtube_cloud)
+    # deployment_name_youtube_cloud = "youtube-cloud"
+    # deployment_youtube_cloud = tools.youTube_deployment_object_create(PORT_RESERVED,
+    #                                                             k8s_automation_tool_instance.volume_request(deployment_name_youtube_cloud),
+    #                                                             deployment_name_youtube_cloud)
+    # tools.create_deployment(api_minikube,deployment_youtube_cloud)
+    # youtube redirection server, netflix redirection server. Objects creation 
+    deployment_youtube_server = tools.youTube_control_deployment_object_create(PORT_RESERVED)    
+    deployment_netflix_server = tools.netflix_control_deployment_object_create(PORT_RESERVED)
+
+    # deploy the created objects
+    tools.create_deployment(api_minikube,deployment_youtube_server)
+    tools.create_deployment(api_minikube,deployment_netflix_server)    
+    time.sleep(8)
+    print(2)
+
+    # youtube redirection server list initial
+    youtube_list_initial(core_v1_api,"youtube-control")
+    print("YOUTUBE_SERVER_IP = " + YOUTUBE_SERVER_IP)
+    time.sleep(4)
+
+    # netflix redirection server list initial
+    netflix_list_initial(core_v1_api,"netflix-control")
+    print("NETFLIX_SERVER_IP = " + NETFLIX_SERVER_IP)
+    time.sleep(4)
+
 
 if __name__ == '__main__':
    

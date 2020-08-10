@@ -1,7 +1,6 @@
 import numpy as np
 import math
 import random
-from collections import Counter
 
 # This is a simple normilized zipf based random value gererator
 
@@ -70,18 +69,7 @@ class ZipfGenerator:
         return N
     
     def get_probability_list(self):
-        return self.zipf_prop_list
-
-
-def test():
-    zipfGenerator_1 = ZipfGenerator(1.2,10)
-    result = []
-    for i in range(1000):
-        temp = zipfGenerator_1.random_zipf_normalized_generator()
-        result.append(temp)
-
-    counter_result = Counter(result)
-    print(counter_result)    
+        return self.zipf_prop_list 
 
 
 

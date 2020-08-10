@@ -1,0 +1,555 @@
+damu@damu-virtual-machine:~/Documents/kubernet/project/CDN_project/allocation_project$ python CDN_deployment.py 
+1
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+2
+YOUTUBE_SERVER_IPstart
+read sucessfully
+YOUTUBE_SERVER_IP pod_ip_address:172.17.0.4
+YOUTUBE_SERVER_IP = 172.17.0.4
+NETFLIX_SERVER_IPstart
+read sucessfully
+NETFLIX_SERVER_IP pod_ip_address:172.17.0.3
+NETFLIX_SERVER_IP = 172.17.0.3
+volume-claim-1created ---
+volume-claim-2created ---
+volume-claim-3created ---
+volume-claim-4created ---
+volume-claim-5created ---
+volume-claim-6created ---
+volume-claim-7created ---
+volume-claim-8created ---
+volume-claim-9created ---
+volume-claim-10created ---
+volume-claim-10
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+1time, try later
+2time, try later
+3time, try later
+read sucessfully
+volume-claim-9
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+read sucessfully
+volume-claim-8
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+deplotment : youtube-1 deployed
+read sucessfully
+volume-claim-7
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+deplotment : netflix-1 deployed
+read sucessfully
+initialization finished
+serving ...
+Distribution Graph generated
+stream_monitor_youtube
+stream_monitor_netflix
+state now (k8s automation): 
+11
+11
+*********
+action generated:
+{'youtube': 'delete', 'netflix': 'still'}
+*********
+Deployment deleted. status='{'observedGeneration': 1, 'replicas': 1, 'updatedReplicas': 1, 'readyReplicas': 1, 'availableReplicas': 1, 'conditions': [{'type': 'Available', 'status': 'True', 'lastUpdateTime': '2020-06-07T15:41:34Z', 'lastTransitionTime': '2020-06-07T15:41:34Z', 'reason': 'MinimumReplicasAvailable', 'message': 'Deployment has minimum availability.'}, {'type': 'Progressing', 'status': 'True', 'lastUpdateTime': '2020-06-07T15:41:34Z', 'lastTransitionTime': '2020-06-07T15:41:32Z', 'reason': 'NewReplicaSetAvailable', 'message': 'ReplicaSet "youtube-1-7f56c87fc9" has successfully progressed.'}]}'
+deplotment : youtube-1 deleted
+Netflix deployment stay still
+stream_monitor_youtube
+stream_monitor_netflix
+ratio_to_local = 13.84615384615384
+state after: 1
+state now (k8s automation): 
+01
+1
+*********
+action generated:
+{'youtube': 'add', 'netflix': 'still'}
+*********
+volume-claim-8
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+deplotment : youtube-1 deployed
+read sucessfully
+Netflix deployment stay still
+stream_monitor_youtube
+stream_monitor_netflix
+ratio_to_local = 46.875
+state after: 11
+state now (k8s automation): 
+11
+11
+*********
+action generated:
+{'youtube': 'delete', 'netflix': 'still'}
+*********
+Deployment deleted. status='{'observedGeneration': 1, 'replicas': 1, 'updatedReplicas': 1, 'readyReplicas': 1, 'availableReplicas': 1, 'conditions': [{'type': 'Available', 'status': 'True', 'lastUpdateTime': '2020-06-07T15:44:59Z', 'lastTransitionTime': '2020-06-07T15:44:59Z', 'reason': 'MinimumReplicasAvailable', 'message': 'Deployment has minimum availability.'}, {'type': 'Progressing', 'status': 'True', 'lastUpdateTime': '2020-06-07T15:44:59Z', 'lastTransitionTime': '2020-06-07T15:44:56Z', 'reason': 'NewReplicaSetAvailable', 'message': 'ReplicaSet "youtube-1-7f56c87fc9" has successfully progressed.'}]}'
+deplotment : youtube-1 deleted
+Netflix deployment stay still
+Exception in thread Thread-175:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-172:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-177:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-174:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-176:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-173:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-180:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-178:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-181:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-179:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-183:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-182:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-186:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-184:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-187:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-185:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-188:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-189:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-190:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-192:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-191:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-193:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-196:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-194:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-195:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-197:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+stream_monitor_youtube
+stream_monitor_netflix
+Exception in thread Thread-199:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-198:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Exception in thread Thread-200:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 94, in request_simulation_netflix
+    simulation_netflix(netflix_ip, NETFLIX_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 85, in simulation_netflix
+    print("ID = " + ID + "end: " + str(number) + "--netflix")
+ValueError: I/O operation on closed file.
+
+ratio_to_local = 21.276595744680847
+state after: 1
+state now (k8s automation): 
+01
+1
+*********
+action generated:
+{'youtube': 'add', 'netflix': 'still'}
+*********
+volume-claim-8
+Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+Exception in thread Thread-202:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+deplotment : youtube-1 deployed
+read sucessfully
+Exception in thread Thread-201:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+Netflix deployment stay still
+Exception in thread Thread-203:
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/threading.py", line 916, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.6/threading.py", line 864, in run
+    self._target(*self._args, **self._kwargs)
+  File "./client/request_client.py", line 89, in request_simulation_youtube
+    simulation_youtube(youtube_ip, YOUTUBE_SERVICE_PORT, ID, generator_zipf)
+  File "./client/request_client.py", line 61, in simulation_youtube
+    print("ID = " + ID + "end: " + str(number) + "--youtube")
+ValueError: I/O operation on closed file.
+
+/home/damu/.local/lib/python3.6/site-packages/matplotlib/backends/backend_gtk3.py:195: Warning: Source ID 8 was not found when attempting to remove it
+  GLib.source_remove(self._idle_draw_id)
+stream_monitor_youtube
+stream_monitor_netflix
+Traceback (most recent call last):
+  File "CDN_deployment.py", line 314, in <module>
+    simultaion()
+  File "CDN_deployment.py", line 297, in simultaion
+    ratio_to_local = data_center_instance.stream_monitor()
+  File "/home/damu/Documents/kubernet/project/CDN_project/allocation_project/center_management/data_center.py", line 171, in stream_monitor
+    ratio_to_local = self.get_local_request_ratio()
+  File "/home/damu/Documents/kubernet/project/CDN_project/allocation_project/center_management/data_center.py", line 46, in get_local_request_ratio
+    ratio_to_cloud_youtube = (request_to_cloud_youtube / request_total_youtube) * 100
+ZeroDivisionError: division by zero

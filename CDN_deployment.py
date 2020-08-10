@@ -222,7 +222,7 @@ def simultaion():
     print("serving ...")
 
     # pass the youtube, netflix server IP address and ID of client  
-    threading._start_new_thread(os.system, ("python ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
+    threading._start_new_thread(os.system, ("sudo python3 ./client/request_client.py {} {} {}".format(YOUTUBE_SERVER_IP, NETFLIX_SERVER_IP,"001"),))
     time.sleep(150)
 
     # monitoring 
@@ -242,7 +242,7 @@ def simultaion():
     # initial deployment is 1 youtube pod, 1 netflix pod
     q_learning_decision_center_instance = q_learning_decision_center(real_time_state=11)
 
-    N_time = 50
+    N_time = 90
     MONITORING_DURATION = 150
     for loop_time in range (N_time):
         # decision_dict = decision_center_instance.decision_generate()

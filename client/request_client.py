@@ -19,10 +19,10 @@ TOTAL_CONTENT_NUMBER = 60
 SERVICE_DURATION = 60
 
 # average number of events per interval for youtube
-P_POISSON_YOUTUBE = 2
+P_POISSON_YOUTUBE = 4
 
 # average number of events per interval for netflix
-P_POISSON_NETFLIX = 1
+P_POISSON_NETFLIX = 2
 
 # each 1 second, the script will generate a new request to servers
 REQUEST_INTERVALE = 5

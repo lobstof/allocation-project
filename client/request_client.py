@@ -126,6 +126,7 @@ def request_graph(zipf_list, N):
 
 if __name__ == "__main__":
 
+    matplotlib.use('Agg')
     # read the input info
     youtube_ip = sys.argv[1]
     netflix_ip = sys.argv[2]

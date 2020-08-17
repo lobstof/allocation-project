@@ -5,7 +5,6 @@ from time import sleep
 import time
 import sys
 import fun_zipf
-import matplotlib.pyplot as plt
 import matplotlib
 import subprocess
 import shlex
@@ -118,15 +117,14 @@ def request_graph(zipf_list, N):
             temp = temp + zipf_list[i]
         height.append(temp)
         tick_label.append("container-{}".format(str(j+1)))
-    plt.bar(left, height, tick_label=tick_label,
+    matplotlib.pyplot.bar(left, height, tick_label=tick_label,
             width=0.4)
     # plt.show()
-    plt.title('request_distribution')
-    plt.savefig('./log/request_distribution.png')
+    matplotlib.pyplot.title('request_distribution')
+    matplotlib.pyplot.savefig('./log/request_distribution.png')
     print("Distribution Graph generated")
 
 if __name__ == "__main__":
-
     matplotlib.use('Agg')
     # read the input info
     youtube_ip = sys.argv[1]

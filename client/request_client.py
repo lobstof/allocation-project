@@ -6,6 +6,7 @@ import time
 import sys
 import fun_zipf
 import matplotlib.pyplot as plt
+import matplotlib
 import subprocess
 import shlex
 import random

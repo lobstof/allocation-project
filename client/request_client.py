@@ -7,7 +7,7 @@ import sys
 import fun_zipf
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt 
+from matplotlib import pyplot as plt
 import subprocess
 import shlex
 import random

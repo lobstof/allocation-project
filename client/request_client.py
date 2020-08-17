@@ -43,6 +43,8 @@ def simulation_youtube(hostip, service_port, ID, generator_zipf):
     generator_zipf = generator_zipf
     opts = Options()
     opts.set_headless()
+    options.addArguments("--no-sandbox")
+    options.addArguments("--disable-dev-shm-usage")
     # Operating in headless mode
     assert opts.headless is True, "headless has not been set yet"
     browser = Chrome(options=opts)
@@ -67,6 +69,8 @@ def simulation_youtube(hostip, service_port, ID, generator_zipf):
 def simulation_netflix(hostip, service_port, ID, generator_zipf):
     generator_zipf = generator_zipf
     opts = Options()
+    options.addArguments("--no-sandbox")
+    options.addArguments("--disable-dev-shm-usage")
     opts.set_headless()
     # Operating in headless mode
     assert opts.headless is True, "headless has not been set yet"

@@ -1,5 +1,5 @@
 import json
-import matplotlib.pyplot as plt
+import matplotlib
 import center_management.update_list as up
 import asyncio
 import time
@@ -27,7 +27,7 @@ class data_center:
     # ratio_to_cloud_list[0] = ratio_youtube, ratio_to_cloud_list[1] = ratio_netflix, ratio_to_cloud_list[2] = ratio_total
     
     def get_local_request_ratio(self):
-
+        matplotlib.use('Agg')
         ratio_to_cloud_list = []
         with open(self.json_record_file) as json_file:
             
@@ -73,7 +73,7 @@ class data_center:
             return (100 - ratio_to_cloud_total)
         
     def result_graph(self):
-
+        matplotlib.use('Agg')
         ratio_list = self.ratio_list
         # ratio_list[0] is intial value
         # ratio_list[i][youtube,netflix,total]    
@@ -88,10 +88,10 @@ class data_center:
 
         x_total = range(1,len(total_ratio)+1)
         y_total = total_ratio
-        plt.plot(x_total,y_total)
-        plt.title('Total Request Ratio To Cloud')
-        plt.savefig('./log/request_ratio_total.png')
-        plt.close()
+        matplotlib.pyplot.plot(x_total,y_total)
+        matplotlib.pyplot.title('Total Request Ratio To Cloud')
+        matplotlib.pyplot.savefig('./log/request_ratio_total.png')
+        matplotlib.pyplot.close()
 
         # print out Youtube request ratio to Cloud
         # select out the youtube flow ratio to Cloud
@@ -103,10 +103,10 @@ class data_center:
 
         x_youtube = range(1,len(youtube_ratio)+1)
         y_youtube = youtube_ratio
-        plt.plot(x_youtube,y_youtube)
-        plt.title('YouTube Request Ratio To Cloud')
-        plt.savefig('./log/request_ratio_youtube.png')
-        plt.close()
+        matplotlib.pyplot.plot(x_youtube,y_youtube)
+        matplotlib.pyplot.title('YouTube Request Ratio To Cloud')
+        matplotlib.pyplot.savefig('./log/request_ratio_youtube.png')
+        matplotlib.pyplot.close()
 
         # print out Netflix request ratio to Cloud
 
@@ -119,18 +119,18 @@ class data_center:
 
         x_netflix = range(1,len(netflix_ratio)+1)
         y_netflix = netflix_ratio
-        plt.plot(x_netflix,y_netflix)
-        plt.title('Netflix Request Ratio To Cloud')
-        plt.savefig('./log/request_ratio_netflix.png')
-        plt.close()
+        matplotlib.pyplot.plot(x_netflix,y_netflix)
+        matplotlib.pyplot.title('Netflix Request Ratio To Cloud')
+        matplotlib.pyplot.savefig('./log/request_ratio_netflix.png')
+        matplotlib.pyplot.close()
 
         # request ratio all
-        plt.plot(x_total,y_total)
-        plt.plot(x_youtube,y_youtube)
-        plt.plot(x_netflix,y_netflix)
-        plt.title('Request Ratio To Cloud')
-        plt.savefig('./log/request_ratio_all.png')
-        plt.close()
+        matplotlib.pyplot.plot(x_total,y_total)
+        matplotlib.pyplot.plot(x_youtube,y_youtube)
+        matplotlib.pyplot.plot(x_netflix,y_netflix)
+        matplotlib.pyplot.title('Request Ratio To Cloud')
+        matplotlib.pyplot.savefig('./log/request_ratio_all.png')
+        matplotlib.pyplot.close()
 
         # convert the result data and operation records into JSON formal
         # and then transfer them to the file
@@ -146,7 +146,7 @@ class data_center:
         file.close()
        
     def stream_monitor(self):
-
+        matplotlib.use('Agg')
         # youtube
         print("stream_monitor_youtube")
         context_youtube = up.check_list(self.youtube_hostip, self.youtube_service_port)
